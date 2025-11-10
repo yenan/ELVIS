@@ -1,15 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elvis Visualizations</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+
+    html {
+      font-family: sans-serif;
+      background-color: #fafafa;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 64px;
+      letter-spacing: 3px;
+      margin-bottom: 0;
+    }
+
+    .subtitle {
+      font-size: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(200px, 300px));
+      gap: 40px;
+    }
+
+    .cell {
+      aspect-ratio: 1 / 1;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 10px;
+      box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+      padding: 1em;
+      box-sizing: border-box;
+      padding-top: 2em;
+      will-change: transform;
+    }
+
+    .cell:hover {
+      transform: translateY(-3px);
+    }
+
+    .cell img {
+      object-fit: contain;
+      width: 100%;
+      padding-top: 1em;
+    }
+
+  </style>
 </head>
+
 <body>
-
-  <header>
-    <h1>Elvis Visualization</h1>
-  </header>
-
+  <h1 class="title">
+    ELVIS
+  </h1>
+  <h3 class="subtitle">
+    Interactive ML Visualisations
+  </h3>
+  <div class="grid">
+    <a href="https://huggingface.co/spaces/elvis-hf/interactive_decision_boundary">
+      <div class="cell">
+        Decision Boundary
+        <img 
+          src="images/decision_boundary.svg" 
+          alt="Decision Boundary Image"
+        />
+      </div>
+    </a>
+    <div class="cell">
+      Regularization
+    </div>
+    <div class="cell">
+      Optimization Trajectory
+    </div>
+    <div class="cell">
+      Gaussian Processes
+    </div>
+    <div class="cell">
+      MLP
+    </div>
+    <div class="cell">
+      CNN
+    </div>
+  </div>
 </body>
 </html>
