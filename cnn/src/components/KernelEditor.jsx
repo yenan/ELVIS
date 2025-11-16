@@ -57,19 +57,21 @@ function KernelEditor(props) {
           <button type="submit">Resize</button>
         </form>
       </div>
-      {props.kernel.map((row, i) => (
-        <div key={i} className="kernel-row">
-          {row.map((value, j) => (
-            <input
-              key={j}
-              type="number"
-              value={value}
-              onChange={(e) => handleChange(i, j, e.target.value)}
-              className="kernel-cell"
-            />
-          ))}
-        </div>
-      ))}
+			<div className="kernel-matrix">
+				{props.kernel.map((row, i) => (
+					<div key={i} className="kernel-row">
+						{row.map((value, j) => (
+							<input
+								key={j}
+								type="number"
+								value={value}
+								onChange={(e) => handleChange(i, j, e.target.value)}
+								className="kernel-cell"
+							/>
+						))}
+					</div>
+				))}
+		</div>
     <div className="bounding-box-button-container">
         <button onClick={props.onBoundingBoxButton}>
           Apply bounding box

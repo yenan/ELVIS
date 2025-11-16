@@ -1,0 +1,26 @@
+.mnist-trainer {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 20px;
+	padding: 20px;
+}
+
+.progress-section {
+	display: grid;
+	grid-template-columns: auto 1fr;
+}
+
+.plots {
+	min-width: 0;
+	ovewrflow: hidden;
+}
+
+.activations {
+	min-width: 0;
+}
+
+.sidebar {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}

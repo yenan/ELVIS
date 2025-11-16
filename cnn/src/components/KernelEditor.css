@@ -1,14 +1,29 @@
 .kernel-editor {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 30px;
   padding: 12px;
   max-width: fit-content;
+	align-items: center;
+}
+
+.kernel-matrix {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 }
 
 .kernel-row {
   display: flex;
   gap: 8px;
+}
+
+.kernel-size-options {
+	border: 1px solid #d0d0d0;
+	border-radius: 6px;
+	padding: 8px 12px;
+	background: #f9f9f9;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .kernel-size-options form {
