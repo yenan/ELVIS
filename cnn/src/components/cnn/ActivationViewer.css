@@ -10,3 +10,9 @@ img {
   align-items: center;
   gap: 10px;
 }
+
+.activation-maps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

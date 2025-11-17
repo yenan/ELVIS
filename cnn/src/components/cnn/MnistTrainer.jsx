@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { MnistData } from "./mnist.js";
 import LossPlot from "./LossPlot.jsx";
 import AccPlot from "./AccPlot.jsx";
 import Tabs from "../Tabs.jsx";
 import ActivationViewer from "./ActivationViewer.jsx";
+import ArchitectureEditor from "./ArchitectureEditor.jsx";
+import KernelViewer from "./KernelViewer.jsx";
 import "./MnistTrainer.css";
 
 export default function MnistTrainer() {
@@ -24,7 +26,7 @@ export default function MnistTrainer() {
 
   const [status, setStatus] = useState("Loading MNIST…");
 
-  const tabData = [
+  const progressTabData = [
     {
       label: "Curves",
       content: (
@@ -44,6 +46,53 @@ export default function MnistTrainer() {
         />
       ),
     },
+    {
+      label: "Kernels",
+      content: (
+        <KernelViewer 
+        />
+      ),
+    },
+
+  ];
+
+  const optionsTabData = [
+    {
+      label: "Train",
+      content: (
+        <div className="train-options">
+          <p>Status: {status}</p>
+          <button
+            onClick={handleTrain}
+            disabled={status === "Loading MNIST…"}
+          >
+            Train Model
+          </button>
+          <button
+            onClick={resetModel}
+            disabled={status === "Loading MNIST…"}
+          >
+            Reset Model
+          </button>
+        </div>
+      ),
+    },
+    {
+      label: "Architecture",
+      content: (
+        <div>
+          <ArchitectureEditor />
+        </div>
+      ),
+    },
+    {
+      label: "Optimization",
+      content: (
+        <div>
+          <p>Optimization options will go here.</p>
+        </div>
+      ),
+    }
   ];
 
   function handleSampleChange() {
@@ -52,7 +101,9 @@ export default function MnistTrainer() {
     }
     const sample = data.nextTestBatch(1);
     const sampleImg = sample.xs.reshape([1, 28, 28, 1]);
+
     setSampleTensor(sampleImg);
+
     tensorToImageUrl(sampleImg).then((url) => {
       setSampleImage(url);
     });
@@ -70,7 +121,9 @@ export default function MnistTrainer() {
 
 		const sample = d.nextTestBatch(1);
 		const sampleImg = sample.xs.reshape([1, 28, 28, 1]);
+
 		setSampleTensor(sampleImg);
+
 		tensorToImageUrl(sampleImg).then((url) => {
 			setSampleImage(url);
 		});
@@ -176,16 +229,22 @@ export default function MnistTrainer() {
     setAcc([]);
     setValAcc([]);
 
+    let currentEpoch = 0;
     await model.fit(trainXs, trainYs, {
       epochs: 100,
       validationData: [testXs, testYs],
-      batchSize: 32,
+      batchSize: 128,
 
       callbacks: {
         onBatchEnd: async (batch, logs) => {
           setStatus(
-            `Training: epoch ${logs.epoch + 1} batch ${batch + 1}`
+            `Training: epoch ${currentEpoch + 1} batch ${batch + 1}`
           );
+
+          if (conv) {
+            console.log(kernel);
+            kernel.dispose();
+          }
 
 					if (activationModel && sampleTensor) {
 						const acts = activationModel.predict(sampleTensor);
@@ -227,10 +286,11 @@ export default function MnistTrainer() {
         },
 
         onEpochEnd: async (epoch, logs) => {
+          currentEpoch = epoch;
           setEpochs((e) => [...e, epoch + 1]);
           setLoss((l) => [...l, logs.loss]);
-          setValLoss((l) => [...l, logs.val_loss]);
           setAcc((a) => [...a, logs.acc]);
+          setValLoss((l) => [...l, logs.val_loss]);
           setValAcc((a) => [...a, logs.val_acc]);
         },
 
@@ -277,23 +337,11 @@ export default function MnistTrainer() {
   return (
     <div className="mnist-trainer">
 			<div className="progress-section">
-        <Tabs tabs={tabData} defaultTab="Curves" />
+        <Tabs tabs={progressTabData} defaultTab="Curves" />
 			</div>
 
 			<div className="sidebar">
-				<p>Status: {status}</p>
-				<button
-					onClick={handleTrain}
-					disabled={status === "Loading MNIST…"}
-				>
-					Train Model
-				</button>
-				<button
-					onClick={resetModel}
-					disabled={status === "Loading MNIST…"}
-				>
-					Reset Model
-				</button>
+        <Tabs tabs={optionsTabData} defaultTab="Train" />
 			</div>
     </div>
   );
