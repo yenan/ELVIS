@@ -27,9 +27,10 @@ function LossPlot(props) {
         xaxis: { title: "Epoch" },
         yaxis: { title: "Cross Entropy Loss" },
         legend: { orientation: "h" },
-        margin: { t: 40 },
+        margin: { t: 0 },
       }}
-      style={{ width: "100%", height: "400px" }}
+      style={{ width: "100%", height: "100%" }}
+      useResizeHandler={true}
     />
   );
 }

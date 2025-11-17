@@ -31,9 +31,10 @@ function AccPlot(props) {
         xaxis: { title: "Epoch" },
         yaxis: { title: "Value" },
         legend: { orientation: "h" },
-        margin: { t: 40 },
+        margin: { t: 0 },
       }}
-      style={{ width: "100%", height: "400px" }}
+      style={{ width: "100%", height: "100%" }}
+      useResizeHandler={true}
     />
   );
 }

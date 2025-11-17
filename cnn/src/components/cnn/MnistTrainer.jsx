@@ -3,6 +3,8 @@ import * as tf from "@tensorflow/tfjs";
 import { MnistData } from "./mnist.js";
 import LossPlot from "./LossPlot.jsx";
 import AccPlot from "./AccPlot.jsx";
+import Tabs from "../Tabs.jsx";
+import ActivationViewer from "./ActivationViewer.jsx";
 import "./MnistTrainer.css";
 
 export default function MnistTrainer() {
@@ -21,6 +23,40 @@ export default function MnistTrainer() {
   const [valAcc, setValAcc] = useState([]);
 
   const [status, setStatus] = useState("Loading MNIST…");
+
+  const tabData = [
+    {
+      label: "Curves",
+      content: (
+        <div className="plots">
+          <LossPlot epochs={epochs} loss={loss} valLoss={valLoss} />
+          <AccPlot epochs={epochs} acc={acc} valAcc={valAcc} />
+        </div>
+      ),
+    },
+    {
+      label: "Activations",
+      content: (
+        <ActivationViewer 
+          activations={activations} 
+          sampleImage={sampleImage}
+          onSampleChange={handleSampleChange}
+        />
+      ),
+    },
+  ];
+
+  function handleSampleChange() {
+    if (!data) {
+      return;
+    }
+    const sample = data.nextTestBatch(1);
+    const sampleImg = sample.xs.reshape([1, 28, 28, 1]);
+    setSampleTensor(sampleImg);
+    tensorToImageUrl(sampleImg).then((url) => {
+      setSampleImage(url);
+    });
+  }
 
 	async function load() {
 		const d = new MnistData();
@@ -143,15 +179,13 @@ export default function MnistTrainer() {
     await model.fit(trainXs, trainYs, {
       epochs: 100,
       validationData: [testXs, testYs],
-      batchSize: 128,
+      batchSize: 32,
 
       callbacks: {
-        onEpochEnd: async (epoch, logs) => {
-          setEpochs((e) => [...e, epoch + 1]);
-          setLoss((l) => [...l, logs.loss]);
-          setValLoss((l) => [...l, logs.val_loss]);
-          setAcc((a) => [...a, logs.acc]);
-          setValAcc((a) => [...a, logs.val_acc]);
+        onBatchEnd: async (batch, logs) => {
+          setStatus(
+            `Training: epoch ${logs.epoch + 1} batch ${batch + 1}`
+          );
 
 					if (activationModel && sampleTensor) {
 						const acts = activationModel.predict(sampleTensor);
@@ -188,6 +222,16 @@ export default function MnistTrainer() {
 
 						setActivations(allMaps);
 					}
+  
+          await tf.nextFrame();
+        },
+
+        onEpochEnd: async (epoch, logs) => {
+          setEpochs((e) => [...e, epoch + 1]);
+          setLoss((l) => [...l, logs.loss]);
+          setValLoss((l) => [...l, logs.val_loss]);
+          setAcc((a) => [...a, logs.acc]);
+          setValAcc((a) => [...a, logs.val_acc]);
         },
 
         onTrainEnd: () => {
@@ -233,36 +277,7 @@ export default function MnistTrainer() {
   return (
     <div className="mnist-trainer">
 			<div className="progress-section">
-				<div className="plots">
-					<LossPlot epochs={epochs} loss={loss} valLoss={valLoss} />
-					<AccPlot epochs={epochs} acc={acc} valAcc={valAcc} />
-				</div>
-				<div className="activations">
-					{sampleImage && (
-							<div>
-								<h3>Sample Input</h3>
-								<img src={sampleImage} alt="Sample Input" />
-							</div>
-						)
-					}
-
-					{activations && activations.length > 0 &&
-						activations.map((layer, i) => (
-							<div key={i} className="activation-layer">
-								<h3>Layer {i + 1} Activations</h3>
-								<div className="activation-maps">
-									{layer.map((map, j) => (
-										<img
-											key={j}
-											src={map}
-											alt={`Layer ${i + 1} Map ${j + 1}`}
-										/>
-									))}
-								</div>
-							</div>
-						))
-					}
-				</div>
+        <Tabs tabs={tabData} defaultTab="Curves" />
 			</div>
 
 			<div className="sidebar">

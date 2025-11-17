@@ -5,14 +5,8 @@
 	padding: 20px;
 }
 
-.progress-section {
-	display: grid;
-	grid-template-columns: auto 1fr;
-}
-
 .plots {
-	min-width: 0;
-	ovewrflow: hidden;
+  display: flex;
 }
 
 .activations {
@@ -24,3 +18,4 @@
 	flex-direction: column;
 	gap: 20px;
 }
+

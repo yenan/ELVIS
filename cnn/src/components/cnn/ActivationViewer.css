@@ -1,0 +1,12 @@
+img {
+  width: 200px;
+  height: 200px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.sample-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
