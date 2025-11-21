@@ -51,11 +51,8 @@ export function convolveColor(image, kernel) {
   for (let y = 0; y < outputHeight; ++y) {
     for (let x = 0; x < outputWidth; ++x) {
 
-      // dot product for each channel
-      let sumR = 0;
-      let sumG = 0;
-      let sumB = 0;
-      
+      // dot product over 3 channels
+      let sum = 0;
       for (let ky = 0; ky < kernelHeight; ++ky) {
         for (let kx = 0; kx < kernelWidth; ++kx) {
           const pixelIndex = ((y + ky) * width + (x + kx)) * 4;
@@ -66,17 +63,16 @@ export function convolveColor(image, kernel) {
           const kernelR = kernel[0][ky][kx];
           const kernelG = kernel[1][ky][kx];
           const kernelB = kernel[2][ky][kx];
-          sumR += r * kernelR;
-          sumG += g * kernelG;
-          sumB += b * kernelB;
+          sum += r * kernelR + g * kernelG + b * kernelB;
         }
       }
 
       const outputIndex = (y * outputWidth + x) * 4;
-      outputData[outputIndex] = Math.min(Math.max(sumR, 0), 255);     // R
-      outputData[outputIndex + 1] = Math.min(Math.max(sumG, 0), 255); // G
-      outputData[outputIndex + 2] = Math.min(Math.max(sumB, 0), 255); // B
-      outputData[outputIndex + 3] = 255;                               // A
+      const clampedValue = Math.min(Math.max(sum, 0), 255);
+      outputData[outputIndex] = clampedValue;     // R
+      outputData[outputIndex + 1] = clampedValue; // G
+      outputData[outputIndex + 2] = clampedValue; // B
+      outputData[outputIndex + 3] = 255;          // A
     }
   }
 
