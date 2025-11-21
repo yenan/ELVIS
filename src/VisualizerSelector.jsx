@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import "./VisualizerSelector.css";
+import decisionBoundaryImage from "./assets/decision_boundary.svg";
 
 
 function VisualizerSelector() {
   return (
-    <>
+    <div className="visualizer-selector">
       <h1 className="title">
         ELVIS
       </h1>
@@ -16,7 +17,7 @@ function VisualizerSelector() {
           <div className="cell">
             Decision Boundary
             <img 
-              src="images/decision_boundary.svg" 
+              src={decisionBoundaryImage}
               alt="Decision Boundary Image"
             />
           </div>
@@ -39,7 +40,7 @@ function VisualizerSelector() {
           </div>
         </Link>
       </div>
-    </>
+    </div>
   );
 }
 

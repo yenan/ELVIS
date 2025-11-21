@@ -3,8 +3,10 @@ import './ConvolutionViewer.css'
 import ConvolutionViewer from "./ConvolutionViewer.jsx"
 import Sidebar from "./Sidebar.jsx"
 
+import marioImage from "../../assets/mario.png";
 
-const DEFAULT_IMAGE = "./mario.png"
+
+const DEFAULT_IMAGE = marioImage;
 
 const DEFAULT_KERNEL = [
   [
