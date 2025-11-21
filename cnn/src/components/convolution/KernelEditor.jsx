@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './KernelEditor.css';
 
 function KernelEditor(props) {
   const [width, setWidth] = useState(props.kernel[0].length);
   const [height, setHeight] = useState(props.kernel.length);
 
-  function handleChange(row, col, value) {
+  const [selectedChannel, setSelectedChannel] = useState(0);  // 0=R, 1=G, 2=B
+
+  function handleChange(channel, row, col, value) {
     const newKernel = props.kernel.map((r) => [...r]);
-    newKernel[row][col] = value === "" ? "" : parseFloat(value);
+    newKernel[channel][row][col] = value === "" ? "" : parseFloat(value);
     props.onKernelChange?.(newKernel);
   }
 
@@ -36,6 +38,12 @@ function KernelEditor(props) {
     props.onKernelChange?.(newKernel);
   }
 
+  useEffect(() => {
+    if (!props.useColor) {
+      setSelectedChannel(0);
+    }
+  }, [props.useColor]);
+
   return (
     <div className="kernel-editor">
       <div className="kernel-size-options">
@@ -57,26 +65,47 @@ function KernelEditor(props) {
           <button type="submit">Resize</button>
         </form>
       </div>
-			<div className="kernel-matrix">
-				{props.kernel.map((row, i) => (
+      {props.useColor && (
+        <div className="channel-selector">
+          <div className="channel-buttons">
+            <button
+              className={selectedChannel === 0 ? "selected" : ""}
+              onClick={() => setSelectedChannel(0)}
+            >
+              R
+            </button>
+          
+            <button
+              className={selectedChannel === 1 ? "selected" : ""}
+              onClick={() => setSelectedChannel(1)}
+            >
+              G
+            </button>
+          
+            <button
+              className={selectedChannel === 2 ? "selected" : ""}
+              onClick={() => setSelectedChannel(2)}
+            >
+              B
+            </button>
+          </div>		
+        </div>
+      )}
+      <div className="kernel-matrix">
+				{props.kernel[selectedChannel].map((row, i) => (
 					<div key={i} className="kernel-row">
 						{row.map((value, j) => (
 							<input
 								key={j}
 								type="number"
 								value={value}
-								onChange={(e) => handleChange(i, j, e.target.value)}
+								onChange={(e) => handleChange(selectedChannel, i, j, e.target.value)}
 								className="kernel-cell"
 							/>
 						))}
 					</div>
 				))}
-		</div>
-    <div className="bounding-box-button-container">
-        <button onClick={props.onBoundingBoxButton}>
-          Apply bounding box
-        </button>
-      </div>
+		  </div>
     </div>
   );
 }

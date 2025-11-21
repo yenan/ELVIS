@@ -61,6 +61,24 @@
   transform: scale(1.02);
 }
 
+.channel-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.channel-buttons .selected {
+  background-color: orange;
+  color: white;
+}
+
+.channel-buttons button:focus {
+  outline: none;
+}
+
+.channel-buttons button:focus-visible {
+  outline: 2px solid orange;
+}
+
 /* Remove default spinner arrows */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

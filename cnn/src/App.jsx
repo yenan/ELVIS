@@ -1,7 +1,7 @@
 import './App.css'
-import ConvolutionVisualizer from "./components/ConvolutionVisualizer.jsx"
+import ConvolutionVisualizer from "./components/convolution/ConvolutionVisualizer.jsx"
 import MnistTrainer from "./components/cnn/MnistTrainer.jsx"
-import Tabs from "./components/Tabs.jsx"
+import Tabs from "./components/utils/Tabs.jsx"
 
 
 function App() {
