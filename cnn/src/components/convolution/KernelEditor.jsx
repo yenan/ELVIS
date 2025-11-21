@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PresetSelector from './PresetSelector.jsx';
 import './KernelEditor.css';
 
 function KernelEditor(props) {
@@ -106,6 +107,7 @@ function KernelEditor(props) {
 					</div>
 				))}
 		  </div>
+      <PresetSelector onKernelChange={props.onKernelChange} />
     </div>
   );
 }
