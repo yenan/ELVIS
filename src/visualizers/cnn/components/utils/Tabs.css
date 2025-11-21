@@ -1,0 +1,38 @@
+.tabs {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tab-buttons {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 0;
+  will-change: border-bottom;
+}
+
+.tab-buttons button.active {
+  border-bottom: 3px solid orange;
+}
+
+.tab-content {
+  flex: 1;
+  padding: 20px;
+	border: none;
+}
+
+.tab-buttons button:focus {
+  outline: none; 
+}
+.tab-buttons button:focus-visible {
+  outline: 2px solid orange; 
+}
+

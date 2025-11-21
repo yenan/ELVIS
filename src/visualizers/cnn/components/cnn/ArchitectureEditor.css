@@ -1,0 +1,69 @@
+.cnn-editor {
+max-width: 700px;
+margin: 20px auto;
+font-family: sans-serif;
+}
+
+.layers {
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+
+.layer-card {
+border: 1px solid #ccc;
+padding: 15px;
+border-radius: 10px;
+background: #fafafa;
+}
+
+.layer-header {
+display: flex;
+justify-content: space-between;
+margin-bottom: 12px;
+}
+
+.layer-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px 20px;
+}
+
+.field {
+display: flex;
+flex-direction: column;
+}
+
+.field label {
+font-size: 12px;
+margin-bottom: 4px;
+color: #555;
+}
+
+.field input,
+.field select {
+padding: 5px;
+border-radius: 5px;
+border: 1px solid #ccc;
+}
+
+.add-btn {
+margin-top: 20px;
+padding: 12px;
+width: 100%;
+background: #4caf50;
+border: none;
+color: white;
+font-size: 16px;
+border-radius: 8px;
+cursor: pointer;
+}
+
+.remove-btn {
+background: #ff4444;
+border: none;
+padding: 6px 10px;
+color: white;
+border-radius: 5px;
+cursor: pointer;
+}
