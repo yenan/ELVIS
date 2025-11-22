@@ -1,86 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "../../../../components/Button/Button.jsx";
+import { PRESETS_COLOR, PRESETS_GRAY } from "../../data/convolution_presets.js";
 import "./PresetSelector.css";
 
-const PRESETS = {
-  "Laplacian": [
-    [
-      [-1, -1, -1],
-      [-1, 8, -1],
-      [-1, -1, -1],
-    ],
-    [
-      [-1, -1, -1],
-      [-1, 8, -1],
-      [-1, -1, -1],
-    ],
-    [
-      [-1, -1, -1],
-      [-1, 8, -1],
-      [-1, -1, -1],
-    ],
-  ],
-  "Red": [
-    [
-      [0, 0, 0],
-      [0, 1, 0],
-      [0, 0, 0],
-    ],
-    [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-    ],
-    [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-    ],
-  ],
-  "Green": [
-    [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-    ],
-    [
-      [0, 0, 0],
-      [0, 1, 0],
-      [0, 0, 0],
-    ],
-    [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-    ],
-  ],
-  "Blue": [
-    [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-    ],
-    [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-    ],
-    [
-      [0, 0, 0],
-      [0, 1, 0],
-      [0, 0, 0],
-    ],
-  ],
-};
-
 function PresetSelector(props) {
-  const presetNames = Object.keys(PRESETS);
-
+  const [presetNames, setPresetNames] = useState(
+    props.useColor
+      ? Object.keys(PRESETS_COLOR)
+      : Object.keys(PRESETS_GRAY)
+  );
   const [selectedPreset, setSelectedPreset] = useState(presetNames[0]);
 
   function applyPreset() {
-    props.onKernelChange(PRESETS[selectedPreset]);
+    if (props.useColor) {
+      props.onKernelChange(PRESETS_COLOR[selectedPreset]);
+    } else {
+      props.onKernelChange(PRESETS_GRAY[selectedPreset]);
+    }
   }
+
+  useEffect(() => {
+    console.log("PresetSelector: useEffect triggered");
+    console.log("useColor:", props.useColor);
+    const names = props.useColor
+      ? Object.keys(PRESETS_COLOR)
+      : Object.keys(PRESETS_GRAY);
+    setPresetNames(names);
+    setSelectedPreset(names[0]);
+  }, [props.useColor]);
 
   return (
     <div className="preset-selector">
