@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "../../../../components/Button/Button.jsx";
 import "./PresetSelector.css";
 
 const PRESETS = {
@@ -97,9 +98,9 @@ function PresetSelector(props) {
         ))}
       </select>
 
-      <button className="preset-apply" onClick={applyPreset}>
+      <Button onClick={applyPreset}>
         Apply
-      </button>
+      </Button>
     </div>
   );
 }

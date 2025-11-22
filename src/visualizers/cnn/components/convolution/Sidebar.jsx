@@ -1,5 +1,6 @@
 import KernelEditor from "./KernelEditor.jsx";
 import Tabs from "../utils/Tabs.jsx";
+import InputSelector from "./InputSelector.jsx";
 import "./Sidebar.css";
 
 
@@ -10,24 +11,11 @@ function Sidebar(props) {
     {
       label: "Input",
       content: (
-        <div>
-          <form>
-            <input 
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-            /> 
-          </form>
-          <label className="switch">
-            <input 
-              type="checkbox" 
-              checked={props.useColor} 
-              onChange={(e) => props.onUseColor(e.target.checked)}
-            />
-            <span className="slider round"></span>
-            <span className="label-text">Use Color</span>
-          </label>
-        </div>
+        <InputSelector 
+          handleFileChange={handleFileChange}
+          useColor={props.useColor}
+          onUseColor={props.onUseColor}
+        />
       ),
     },
     {

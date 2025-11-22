@@ -22,9 +22,11 @@ function VisualizerSelector() {
             />
           </div>
         </a>
-        <div className="cell">
-          Regularization
-        </div>
+        <a href="https://huggingface.co/spaces/elvis-hf/regularization">
+          <div className="cell">
+            Regularization
+          </div>
+        </a>
         <div className="cell">
           Optimization Trajectory
         </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import PresetSelector from './PresetSelector.jsx';
+import Button from "../../../../components/Button/Button.jsx";
 import './KernelEditor.css';
 
 function KernelEditor(props) {
@@ -63,32 +64,30 @@ function KernelEditor(props) {
             min={1}
             onChange={(e) => setHeight(parseInt(e.target.value))}
           />
-          <button type="submit">Resize</button>
+          <Button type="submit">Resize</Button>
         </form>
       </div>
       {props.useColor && (
         <div className="channel-selector">
           <div className="channel-buttons">
-            <button
-              className={selectedChannel === 0 ? "selected" : ""}
-              onClick={() => setSelectedChannel(0)}
+            <Button 
+                selected={selectedChannel === 0}
+                onClick={() => setSelectedChannel(0)}
             >
               R
-            </button>
-          
-            <button
-              className={selectedChannel === 1 ? "selected" : ""}
-              onClick={() => setSelectedChannel(1)}
+            </Button>
+            <Button
+                selected={selectedChannel === 1}
+                onClick={() => setSelectedChannel(1)}
             >
               G
-            </button>
-          
-            <button
-              className={selectedChannel === 2 ? "selected" : ""}
-              onClick={() => setSelectedChannel(2)}
+            </Button>
+            <Button
+                selected={selectedChannel === 2}
+                onClick={() => setSelectedChannel(2)}
             >
               B
-            </button>
+            </Button>
           </div>		
         </div>
       )}
