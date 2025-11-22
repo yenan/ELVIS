@@ -21,20 +21,24 @@ function KernelEditor(props) {
   }
 
   function handleSizeChange(newWidth, newHeight) {
-    const currentWidth = props.kernel[0].length;
-    const currentHeight = props.kernel.length;
+    const currentWidth = props.kernel[0][0].length;
+    const currentHeight = props.kernel[0].length;
     const newKernel = [];
 
-    for (let i = 0; i < newHeight; i++) {
-      const row = [];
-      for (let j = 0; j < newWidth; j++) {
-        if (i < currentHeight && j < currentWidth) {
-          row.push(props.kernel[i][j]);
-        } else {
-          row.push(0);
+    for (let c = 0; c < 3; ++c) {
+      const matrix = [];
+      for (let i = 0; i < newHeight; ++i) {
+        const row = [];
+        for (let j = 0; j < newWidth; ++j) {
+          if (i < currentHeight && j < currentWidth) {
+            row.push(props.kernel[c][i][j]);
+          } else {
+            row.push(0);
+          }
         }
+        matrix.push(row);
       }
-      newKernel.push(row);
+      newKernel.push(matrix);
     }
 
     props.onKernelChange?.(newKernel);
@@ -106,7 +110,10 @@ function KernelEditor(props) {
 					</div>
 				))}
 		  </div>
-      <PresetSelector onKernelChange={props.onKernelChange} />
+      <PresetSelector 
+        onKernelChange={props.onKernelChange} 
+        useColor={props.useColor} 
+      />
     </div>
   );
 }
