@@ -1,6 +1,7 @@
 import './Cnn.css'
 import ConvolutionVisualizer from "./components/convolution/ConvolutionVisualizer.jsx"
-import MnistTrainer from "./components/cnn/MnistTrainer.jsx"
+import NetworkVisualizer from "./components/network/NetworkVisualizer.jsx"
+// import MnistTrainer from "./components/cnn/MnistTrainer.jsx"
 import Tabs from "./components/utils/Tabs.jsx"
 
 
@@ -11,8 +12,8 @@ function App() {
 			content: <ConvolutionVisualizer />,
 	  },
 		{
-			label: "CNN",
-			content: <MnistTrainer />,
+			label: "Network",
+			content: <NetworkVisualizer />,
 		},
 	];
 
