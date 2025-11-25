@@ -6,16 +6,14 @@ import { load, train, Cnn } from "./train.js";
 import './NetworkVisualizer.css';
 
 const DEFAULT_ARCHITECTURE = [
-  { type: "conv2d", filters: 8, kernel: 5, stride: 1, padding: 1 },
-  { type: "relu" },
+  { type: "conv2d", filters: 8, kernel: 5, stride: 1, padding: 1, activationType: "relu" },
   { type: "maxpool", size: 2, stride: 2 },
 
-  { type: "conv2d", filters: 16, kernel: 5, stride: 1, padding: 1 },
-  { type: "relu" },
+  { type: "conv2d", filters: 16, kernel: 5, stride: 1, padding: 1 , activationType: "relu"},
   { type: "maxpool", size: 2, stride: 2 },
 
   { type: "flatten" },
-  { type: "dense", units: 10 },
+  { type: "dense", units: 10, activationType: "softmax" },
 ];
 
 function NetworkVisualizer() {
@@ -41,7 +39,11 @@ function NetworkVisualizer() {
 	const trainController = useRef({
 		isPaused: false,
 		stopRequested: false,
+		sampleIndex: 0,
 	});
+
+	// training visualization
+	const [info, setInfo] = useState(null);
 
 	// init dataset
 	useEffect(() => {
@@ -99,6 +101,7 @@ function NetworkVisualizer() {
 		await waitUntilNotTraining();
 		console.log("Training stopped. Resetting model.");
 		setLosses([]);
+		setInfo(null);
 		resetModel();
 	}
 
@@ -131,23 +134,29 @@ function NetworkVisualizer() {
 				batchSize,
 				epochs,
 				trainController.current,
-				({ epoch, batch, loss }) => {
+				({ epoch, batch, loss, info }) => {
 					setLosses((prevLosses) => [
 						...prevLosses,
 						{ epoch, batch, loss }
 					]);
+					setInfo(info);
 				}
 			);
 		} finally {
 			setIsTraining(false);
 			trainController.current.isPaused = false;
 			trainController.current.stopRequested = false;
+			alert("Training finished.");
 		}
 	}
 
   return (
     <div className="network-visualizer">
-      <NetworkViewer losses={losses} isTraining={isTraining} />
+      <NetworkViewer 
+				losses={losses} 
+				info={info}
+				isTraining={isTraining} 
+			/>
       <Sidebar 
 				onStartTraining={handleStartTraining} 
 				onPauseTraining={handlePauseTraining}
@@ -155,6 +164,9 @@ function NetworkVisualizer() {
 				onStopTraining={handleStopTraining}
 				onResetTraining={handleResetTraining}
 				isTraining={isTraining}
+		    isPaused={trainController.current.isPaused}
+		    architecture={architecture}
+				setArchitecture={setArchitecture}
 			/>
     </div>
   );

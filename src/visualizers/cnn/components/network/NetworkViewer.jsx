@@ -1,3 +1,4 @@
+import InfoViewer from './InfoViewer';
 import Plot from 'react-plotly.js';
 
 function NetworkViewer(props) {
@@ -22,6 +23,7 @@ function NetworkViewer(props) {
 					yaxis: { title: { text: "Train loss" } },
 				}}
 			/>
+			<InfoViewer info={props.info} />
     </div>
   );
 }

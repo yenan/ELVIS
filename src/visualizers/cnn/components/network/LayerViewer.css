@@ -1,0 +1,33 @@
+.layer-viewer {
+  padding: 12px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.layer-title {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.layer-details {
+	display: flex;
+	justify-content: space-evenly;
+  margin-bottom: 12px;
+  color: #444;
+  font-size: 14px;
+}
+
+.layer-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.layer-grid img {
+	width: 100px;
+	height: 100px;
+	image-rendering: pixelated;
+}

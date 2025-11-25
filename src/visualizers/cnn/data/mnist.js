@@ -149,4 +149,17 @@ export class MnistData {
 
     return {xs, labels};
   }
+
+	getTestSample(index) {
+		const idx = index % NUM_TEST_ELEMENTS;
+
+		const image = this.testImages.slice(idx * IMAGE_SIZE, (idx + 1) * IMAGE_SIZE);
+		const label = this.testLabels.slice(idx * NUM_CLASSES, (idx + 1) * NUM_CLASSES);
+
+		const xs = tf.tensor2d(image, [1, IMAGE_SIZE]);
+		const labels = tf.tensor2d(label, [1, NUM_CLASSES]);
+
+		return { xs, labels };
+	}
+
 }

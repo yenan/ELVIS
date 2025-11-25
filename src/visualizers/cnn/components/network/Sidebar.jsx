@@ -1,5 +1,6 @@
 import Tabs from "../utils/Tabs.jsx";
 import Button from "../../../../components/Button/Button.jsx";
+import ArchitectureEditor from "./ArchitectureEditor.jsx";
 
 function Sidebar(props) {
   const tabData = [
@@ -40,16 +41,21 @@ function Sidebar(props) {
       content: (
         <div>
           Dataset: 
-          <select value="MNIST">
-            <option value="MNIST">MNIST</option>
-            <option value="CIFAR-10">CIFAR-10</option>
+          <select value="mnist">
+            <option value="mnist">MNIST</option>
+            <option value="cifar-10">CIFAR-10</option>
           </select>
         </div>
       ),
     },
     {
       label: "Architecture",
-      content: <div>Architecture Configuration</div>,
+      content: (
+				<ArchitectureEditor 
+					architecture={props.architecture}
+					setArchitecture={props.setArchitecture}
+				/>
+			),
     },
     {
       label: "Optimization",

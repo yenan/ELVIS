@@ -54,9 +54,9 @@ class Cnn {
       switch (layer.type) {
         case "conv2d":
           out = out.conv2d(layer.weights, layer.stride, layer.padding);
-          break;
-        case "relu":
-          out = out.relu();
+					if (layer.activationType === "relu") {
+						out = out.relu();
+					}
           break;
         case "maxpool":
           out = out.maxPool([layer.size, layer.size], [layer.stride, layer.stride], 0);
@@ -86,6 +86,85 @@ class Cnn {
     }
     return out;
 	}
+
+	forwardWithInfo(x) {
+		let out = x;
+		const info = [];
+
+		info.push({
+			type: "input",
+			output: out.clone()
+		});
+
+		for (const layer of this.architecture) {
+			switch (layer.type) {
+
+				case "conv2d":
+					out = out.conv2d(layer.weights, layer.stride, layer.padding);
+					if (layer.activationType === "relu") {
+						out = out.relu();
+					}
+
+					info.push({
+						type: "conv2d",
+						output: out.clone(),
+						weights: layer.weights,      // kernel shape: [k,k,inC,outC]
+						stride: layer.stride,
+						padding: layer.padding
+					});
+					break;
+
+				case "maxpool":
+					out = out.maxPool([layer.size, layer.size], [layer.stride, layer.stride], 0);
+
+					info.push({
+						type: "maxpool",
+						output: out.clone(),
+						size: layer.size,
+						stride: layer.stride
+					});
+					break;
+
+				case "flatten":
+					const flatDim = out.shape[1] * out.shape[2] * out.shape[3];
+					out = out.reshape([-1, flatDim]);
+
+					info.push({
+						type: "flatten",
+						output: out.clone()
+					});
+
+					// dense init
+					const next = this.architecture[this.architecture.indexOf(layer) + 1];
+					if (next?.type === "dense" && next.weights === null) {
+						next.weights = tf.variable(
+							tf.randomUniform(
+								[flatDim, next.units],
+								-Math.sqrt(1 / flatDim),
+								Math.sqrt(1 / flatDim)
+							)
+						);
+						next.biases = tf.variable(tf.zeros([next.units]));
+					}
+					break;
+
+				case "dense":
+					out = out.matMul(layer.weights).add(layer.biases);
+
+					info.push({
+						type: "dense",
+						output: out.clone(),
+						weights: layer.weights,
+						biases: layer.biases,
+						units: layer.units
+					});
+					break;
+			}
+		}
+
+		return { output: out, info: info };
+	}
+
 }
 
 async function train(
@@ -129,6 +208,19 @@ async function train(
 
 			const lossVal = (await cost.data())[0];
 
+			const sample = data.getTestSample(controller.sampleIndex);
+
+			const { output, info } = model.forwardWithInfo(
+				sample.xs.reshape(
+					[
+						1, 
+						data.imageSize, 
+						data.imageSize, 
+						data.numInputChannels
+					]
+				)
+			);
+
 			if (controller.stopRequested) {
 				console.log("Training stopped");
 				return;
@@ -138,7 +230,8 @@ async function train(
 				onBatchEnd({
 					epoch: epoch,
 					batch: b,
-					loss: lossVal
+					loss: lossVal,
+					info: info
 				});
 			}
 
@@ -147,7 +240,6 @@ async function train(
 	}
 	console.log("Training complete");
 }
-
 
 
 export { load, train, Cnn };
