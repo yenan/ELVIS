@@ -1,21 +1,37 @@
 import Tabs from "../utils/Tabs.jsx";
 import Button from "../../../../components/Button/Button.jsx";
 
-function Sidebar() {
+function Sidebar(props) {
   const tabData = [
     {
       label: "Train",
       content: (
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <Button>
-            Start Training
-          </Button>
-          <Button>
-            Stop Training
-          </Button>
-          <Button>
-            Reset Training
-          </Button>
+					{ !props.isTraining && (
+							<>
+								<Button onClick={props.onStartTraining}>
+									Start Training
+								</Button>
+								<Button onClick={props.onResetTraining}>
+									Reset Training
+								</Button>
+							</>
+						)
+					}
+					{ props.isTraining && (
+							<>
+								<Button onClick={props.onPauseTraining}>
+									Pause Training
+								</Button>
+								<Button onClick={props.onContinueTraining}>
+									Continue Training
+								</Button>
+								<Button onClick={props.onStopTraining}>
+									Stop Training
+								</Button>
+							</>
+						)
+					}
         </div>
       ),
     },

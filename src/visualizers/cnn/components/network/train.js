@@ -1,8 +1,15 @@
-import { MnistData } from './data.js';
+import * as tf from '@tensorflow/tfjs';
+import { MnistData } from '../../data/mnist.js';
 
-async function load() {
-  data = new MnistData();
+async function load(dataset) {
+	let data;
+	if (dataset === "mnist") {
+  	data = new MnistData();
+	} else {
+		throw new Error(`Dataset ${dataset} not supported`);
+	}
   await data.load();
+	return data;
 }
 
 class Cnn {
@@ -22,8 +29,8 @@ class Cnn {
         const layerWeights = tf.variable(
           tf.randomUniform(
             shape, 
-            -sqrt(1 / (layer.kernel * layer.kernel * inChannels)), 
-            sqrt(1 / (layer.kernel * layer.kernel * inChannels))
+            -Math.sqrt(1 / (layer.kernel * layer.kernel * inChannels)), 
+            Math.sqrt(1 / (layer.kernel * layer.kernel * inChannels))
           )
         );
 
@@ -64,8 +71,8 @@ class Cnn {
             next.weights = tf.variable(
               tf.randomUniform(
                 [flatDim, next.units], 
-                -sqrt(1 / flatDim), 
-                sqrt(1 / flatDim)
+                -Math.sqrt(1 / flatDim), 
+                Math.sqrt(1 / flatDim)
               )
             );
             next.biases = tf.variable(tf.zeros([next.units]));
@@ -78,5 +85,69 @@ class Cnn {
       }
     }
     return out;
+	}
 }
 
+async function train(
+	data, 
+	model, 
+	optimizer, 
+	batchSize, 
+	epochs,
+	controller,
+	onBatchEnd = null
+) {
+	const numBatches = Math.floor(data.trainSize / batchSize);
+	for (let epoch = 0; epoch < epochs; ++epoch) {
+		for (let b = 0; b < numBatches; ++b) {
+
+			if (controller.stopRequested) {
+				console.log("Training stopped");
+				return;
+			}
+
+			while (controller.isPaused) {
+				await tf.nextFrame();
+			}
+
+			const cost = optimizer.minimize(() => {
+				const batch = data.nextTrainBatch(batchSize);
+				const xs = batch.xs.reshape(
+					[
+						batchSize, 
+						data.imageSize, 
+						data.imageSize, 
+						data.numInputChannels
+					]
+				);
+				const preds = model.forward(xs);
+				const lossValue = tf.losses.softmaxCrossEntropy(
+					batch.labels, preds
+				).mean();
+				return lossValue;
+			}, true);
+
+			const lossVal = (await cost.data())[0];
+
+			if (controller.stopRequested) {
+				console.log("Training stopped");
+				return;
+			}
+
+			if (onBatchEnd) {
+				onBatchEnd({
+					epoch: epoch,
+					batch: b,
+					loss: lossVal
+				});
+			}
+
+			await tf.nextFrame();
+		}
+	}
+	console.log("Training complete");
+}
+
+
+
+export { load, train, Cnn };

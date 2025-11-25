@@ -41,6 +41,12 @@ export class MnistData {
   constructor() {
     this.shuffledTrainIndex = 0;
     this.shuffledTestIndex = 0;
+
+		this.numClasses = NUM_CLASSES;
+		this.numInputChannels = 1;
+		this.trainSize = NUM_TRAIN_ELEMENTS;
+		this.testSize = NUM_TEST_ELEMENTS;
+		this.imageSize = 28;
   }
 
   async load() {
