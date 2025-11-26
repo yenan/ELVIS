@@ -26,6 +26,8 @@ function UnivariatePage() {
   const [draftFunctionInput, setDraftFunctionInput] = useState("x ^ 2");
   const [functionInput, setFunctionInput] = useState("x ^ 2");
   const { derivative, secondDerivative } = useDerivatives(functionInput);
+  const [functionXMin, setFunctionXMin] = useState(-1);
+  const [functionXMax, setFunctionXMax] = useState(1);
 
   useEffect(() => {
     updateFunctionInput(draftFunctionInput, setFunctionInput);
@@ -58,6 +60,8 @@ function UnivariatePage() {
       <OptimizationPlot 
         functionInput={functionInput} 
         trajectory={trajectory}
+        functionXMin={functionXMin}
+        functionXMax={functionXMax}
       />
       <Sidebar 
         draftFunctionInput={draftFunctionInput} 
@@ -65,6 +69,10 @@ function UnivariatePage() {
         derivative={derivative} 
         secondDerivative={secondDerivative}
         showSecondDerivative={true}
+        functionXMin={functionXMin}
+        setFunctionXMin={setFunctionXMin}
+        functionXMax={functionXMax}
+        setFunctionXMax={setFunctionXMax}
 
         optimizer={optimizer}
         setOptimizer={setOptimizer}

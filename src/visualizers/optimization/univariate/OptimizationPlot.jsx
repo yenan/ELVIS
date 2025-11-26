@@ -5,7 +5,7 @@ import "../styles.css";
 
 const math = create(all);
 
-function sampleFunction(expr, xMin = -1, xMax = 1, numPoints = 200) {
+function sampleFunction(expr, xMin, xMax, numPoints = 200) {
   const xs = [];
   const ys = [];
   const step = (xMax - xMin) / (numPoints - 1);
@@ -25,7 +25,7 @@ function sampleFunction(expr, xMin = -1, xMax = 1, numPoints = 200) {
   return { xs, ys };
 }
 
-function updateFunction(functionInput, setXs, setYs) {
+function updateFunction(functionInput, setXs, setYs, xMin, xMax) {
   if (!functionInput) {
     setXs([]);
     setYs([]);
@@ -33,7 +33,7 @@ function updateFunction(functionInput, setXs, setYs) {
   }
 
   const expr = math.compile(functionInput);
-  const { xs, ys } = sampleFunction(expr);
+  const { xs, ys } = sampleFunction(expr, xMin, xMax);
   setXs(xs);
   setYs(ys);
 }
@@ -43,8 +43,8 @@ function OptimizationPlot(props) {
   const [ys, setYs] = useState([]);
 
   useEffect(() => {
-    updateFunction(props.functionInput, setXs, setYs);
-  }, [props.functionInput]);
+    updateFunction(props.functionInput, setXs, setYs, props.functionXMin, props.functionXMax);
+  }, [props.functionInput, props.functionXMin, props.functionXMax]);
 
   return (
     <div className="plot-wrapper">

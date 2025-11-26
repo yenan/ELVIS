@@ -14,6 +14,10 @@ function Sidebar(props) {
           derivative={props.derivative}
           secondDerivative={props.secondDerivative}
           showSecondDerivative={props.showSecondDerivative}
+          xMin={props.functionXMin}
+          setXMin={props.setFunctionXMin}
+          xMax={props.functionXMax}
+          setXMax={props.setFunctionXMax}
         />
       ),
     },
