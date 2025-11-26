@@ -34,9 +34,11 @@ function VisualizerSelector() {
             />
           </div>
         </a>
-        <div className="cell">
-          Optimization Trajectory
-        </div>
+        <Link to="/optimization">
+          <div className="cell">
+            Optimization Trajectory
+          </div>
+        </Link>
         <a href="https://huggingface.co/spaces/elvis-hf/gp_visualizer">
           <div className="cell">
             Gaussian Processes

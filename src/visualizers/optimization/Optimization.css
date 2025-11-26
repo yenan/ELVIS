@@ -1,0 +1,12 @@
+h1 {
+  font-size: 40px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.main-container {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}

@@ -1,4 +1,4 @@
-import Tabs from "../utils/Tabs.jsx";
+import Tabs from "../../../../components/Tabs/Tabs.jsx";
 import Button from "../../../../components/Button/Button.jsx";
 import ArchitectureEditor from "./ArchitectureEditor.jsx";
 

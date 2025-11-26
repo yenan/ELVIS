@@ -1,0 +1,116 @@
+.plot-wrapper {
+    min-height: 480px;
+    background-color: #fff;
+    border: 1px solid #dcdfe6;
+    border-radius: 12px;
+    padding: 12px;
+    /* box-shadow: 0 10px 40px rgba(47, 61, 103, 0.08); */
+}
+
+.plot {
+    width: 100%;
+    height: 100%;
+    min-height: 420px;
+}
+
+.card,
+.controls {
+    background-color: #fff;
+    border: 1px solid #dcdfe6;
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    /* box-shadow: 0 10px 40px rgba(47, 61, 103, 0.08); */
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label,
+.field legend {
+    font-weight: 600;
+    color: #2c2f37;
+    align-self: flex-start;
+}
+
+.field input[type="text"],
+.field input[type="number"],
+.field textarea {
+    border: 1px solid #ccd0dd;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background-color: #fafafe;
+}
+
+.field textarea {
+    resize: vertical;
+}
+
+.field input[readonly],
+.field textarea[readonly] {
+    background-color: #f4f6fc;
+    color: #4a4f5c;
+}
+
+.fieldset {
+    border: 1px solid #ccd0dd;
+    border-radius: 6px;
+    padding: 10px 12px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fieldset label {
+    font-weight: 500;
+    color: #343844;
+}
+
+.slider-field {
+    gap: 10px;
+}
+
+.slider-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.slider-control input[type="range"] {
+    width: 80px;
+    -webkit-appearance: none;
+    background-color: lightgray;
+    border-radius: 6px;
+    accent-color: var(--accent-color);
+    flex: 1;
+}
+
+.slider-control input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  background: lightgray;
+  border-radius: 6px;
+}
+
+.slider-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  cursor: pointer;
+
+  margin-top: calc((6px - 14px) / 2);
+}
+
+.slider-control span {
+    min-width: 28px;
+    text-align: right;
+    font-weight: 600;
+}

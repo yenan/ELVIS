@@ -1,5 +1,5 @@
 import KernelEditor from "./KernelEditor.jsx";
-import Tabs from "../utils/Tabs.jsx";
+import Tabs from "../../../../components/Tabs/Tabs.jsx";
 import InputSelector from "./InputSelector.jsx";
 import "./Sidebar.css";
 
