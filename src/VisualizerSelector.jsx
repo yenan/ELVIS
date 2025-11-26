@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import "./VisualizerSelector.css";
 import decisionBoundaryImage from "./assets/decision_boundary.svg";
-import regularizationImage from "./assets/regularization.svg";
+import regularizationImage from "./assets/regularization.png";
+import gaussianProcessesImage from "./assets/gaussian_processes.png";
+import mlpImage from "./assets/mlp.png";
 
 
 function VisualizerSelector() {
@@ -35,12 +37,24 @@ function VisualizerSelector() {
         <div className="cell">
           Optimization Trajectory
         </div>
-        <div className="cell">
-          Gaussian Processes
-        </div>
-        <div className="cell">
-          MLP
-        </div>
+        <a href="https://huggingface.co/spaces/elvis-hf/gp_visualizer">
+          <div className="cell">
+            Gaussian Processes
+            <img
+              src={gaussianProcessesImage}
+              alt="Gaussian Processes Image"
+            />
+          </div>
+        </a>
+        <a href="https://huggingface.co/spaces/elvis-hf/mlp_visualizer">
+          <div className="cell">
+            MLP
+            <img
+              src={mlpImage}
+              alt="MLP Image"
+            />
+          </div>
+        </a>
         <Link to="/cnn">
           <div className="cell">
             CNN
