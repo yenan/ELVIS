@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import "./VisualizerSelector.css";
 import decisionBoundaryImage from "./assets/decision_boundary.svg";
+import regularizationImage from "./assets/regularization.svg";
 
 
 function VisualizerSelector() {
@@ -25,6 +26,10 @@ function VisualizerSelector() {
         <a href="https://huggingface.co/spaces/elvis-hf/regularization">
           <div className="cell">
             Regularization
+            <img
+              src={regularizationImage}
+              alt="Regularization Image"
+            />
           </div>
         </a>
         <div className="cell">

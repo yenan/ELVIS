@@ -31,6 +31,7 @@
   padding: 1em;
   box-sizing: border-box;
   padding-top: 2em;
+  height: 100%;
   will-change: transform;
 }
 
@@ -41,6 +42,7 @@
 .cell img {
   object-fit: contain;
   width: 100%;
+  max-height: calc(100% - 3em);
   padding-top: 1em;
 }
 
