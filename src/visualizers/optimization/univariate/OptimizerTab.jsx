@@ -11,9 +11,9 @@ function handleOptimizerChange(
   setParams(DEFAULT_PARAMS[selectedOptimizer]);
 }
 
-function OptimizerSettings(props) {
+function OptimizerTab(props) {
   return (
-    <>
+    <div className="controls">
       <div className="field">
         <label htmlFor="optimizer-select">Optimizer</label>
         <select
@@ -89,8 +89,8 @@ function OptimizerSettings(props) {
           />
         </div>
       )} 
-    </>
+    </div>
   );
 }
 
-export default OptimizerSettings;
+export default OptimizerTab;

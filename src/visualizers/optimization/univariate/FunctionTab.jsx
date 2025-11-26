@@ -1,9 +1,8 @@
 import FunctionInput from "./FunctionInput.jsx";
 import DerivativesDisplay from "./DerivativesDisplay.jsx";
-import OptimizerSettings from "./OptimizerSettings.jsx";
 import "../styles.css";
 
-function SettingsTab(props) {
+function FunctionTab(props) {
   return (
     <div className="controls">
       <FunctionInput 
@@ -15,14 +14,8 @@ function SettingsTab(props) {
         secondDerivative={props.secondDerivative}
         showSecondDerivative={props.showSecondDerivative}
       />
-      <OptimizerSettings 
-        optimizer={props.optimizer} 
-        setOptimizer={props.setOptimizer}
-        params={props.optimizerParams} 
-        setParams={props.setOptimizerParams}
-      />
     </div>
   );
 }
 
-export default SettingsTab;
+export default FunctionTab;

@@ -1,23 +1,30 @@
 import OptimizeTab from "./OptimizeTab.jsx";
-import SettingsTab from "./SettingsTab.jsx";
+import FunctionTab from "./FunctionTab.jsx";
+import OptimizerTab from "./OptimizerTab.jsx";
 import Tabs from "../../../components/Tabs/Tabs.jsx";
 
 function Sidebar(props) {
   const tabData = [
     {
-      label: "Settings",
+      label: "Function",
       content: (
-        <SettingsTab 
+        <FunctionTab 
           draftFunctionInput={props.draftFunctionInput} 
           setDraftFunctionInput={props.setDraftFunctionInput}
           derivative={props.derivative}
           secondDerivative={props.secondDerivative}
           showSecondDerivative={props.showSecondDerivative}
-
+        />
+      ),
+    },
+    {
+      label: "Optimizer",
+      content: (
+        <OptimizerTab
           optimizer={props.optimizer}
           setOptimizer={props.setOptimizer}
-          optimizerParams={props.optimizerParams}
-          setOptimizerParams={props.setOptimizerParams}
+          params={props.optimizerParams}
+          setParams={props.setOptimizerParams}
         />
       ),
     },
@@ -34,7 +41,7 @@ function Sidebar(props) {
 
   return (
     <div className="sidebar">
-      <Tabs tabs={tabData} defaultTab="Settings"/>
+      <Tabs tabs={tabData} defaultTab="Function"/>
     </div>
   );
 }
