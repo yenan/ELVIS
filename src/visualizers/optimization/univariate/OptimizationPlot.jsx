@@ -41,6 +41,9 @@ function updateFunction(functionInput, setXs, setYs, xMin, xMax) {
     return;
   }
 
+  xMin -= 0.2 * Math.abs(xMin);
+  xMax += 0.2 * Math.abs(xMax);
+
   try {
     const expr = math.compile(functionInput);
     const { xs, ys } = sampleFunction(expr, xMin, xMax);

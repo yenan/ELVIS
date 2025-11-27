@@ -79,6 +79,11 @@ function updateFunction(
     return;
   }
 
+  xMin -= 0.2 * Math.abs(xMin);
+  xMax += 0.2 * Math.abs(xMax);
+  yMin -= 0.2 * Math.abs(yMin);
+  yMax += 0.2 * Math.abs(yMax);
+
   try {
     const expr = math.compile(functionInput);
     const { xs, ys, zs } = getContourPoints(
