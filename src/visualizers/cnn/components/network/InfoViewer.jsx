@@ -11,18 +11,20 @@ function InfoViewer(props) {
 						key={idx}
 					  output={layer.output}
             onSampleIndexChange={props.onSampleIndexChange}
+            tick={props.tick}
 					/>
 				);
 			case 'conv2d':
 				return (
 					<Conv2dLayerViewer 
-						key={idx} 
+						layerIdx={idx} 
 						stride={layer.stride} 
 						padding={layer.padding} 
 						activationType={layer.activationType}
 						weights={layer.weights} 
 					  output={layer.output}
 					  type={layer.type}
+            tick={props.tick}
 					/>
 				);
 			case 'maxpool':
@@ -32,6 +34,7 @@ function InfoViewer(props) {
 						stride={layer.stride} 
 						size={layer.size}
 					  output={layer.output}
+            tick={props.tick}
 					/>
 				);
 			case 'flatten':

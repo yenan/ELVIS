@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import "./LayerViewer.css";
 
 function MaxPoolLayerViewer(props) {
@@ -54,8 +55,13 @@ function MaxPoolLayerViewer(props) {
 		return canvas.toDataURL();
 	}
 
-	const activations = extractActivationMaps();
-	const activationSrcs = activations.map(imgDataToSrc);
+	const activations = useMemo(() => {
+    return extractActivationMaps();
+  }, [props.output]);
+
+	const activationSrcs = useMemo(() => {
+    return activations.map(imgDataToSrc);
+  }, [activations]);
 
 	return (
 		<div className="layer-viewer">

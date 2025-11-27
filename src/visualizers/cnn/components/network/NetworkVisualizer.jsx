@@ -88,6 +88,9 @@ function parseArchitecture(text) {
 }
 
 function NetworkVisualizer() {
+  // render timing
+  const [tick, setTick] = useState(0);
+
   // dataset states
   const [dataset, setDataset] = useState("mnist");
   const [imageSize, setImageSize] = useState(28);
@@ -111,8 +114,8 @@ function NetworkVisualizer() {
   const [architecture, setArchitecture] = useState(DEFAULT_ARCHITECTURE);
 
   // training states
-	const [losses, setLosses] = useState([]);
 	const [isTraining, setIsTraining] = useState(false);
+  const lossesRef = useRef([]);
 	const trainController = useRef({
 		isPaused: false,
 		stopRequested: false,
@@ -122,7 +125,7 @@ function NetworkVisualizer() {
   const optimizerRef = useRef(null);
 
 	// training visualization
-	const [info, setInfo] = useState(null);
+  const infoRef = useRef([]);
 
 	// init dataset
 	useEffect(() => {
@@ -180,8 +183,8 @@ function NetworkVisualizer() {
 
 		await waitUntilNotTraining();
 		console.log("Training stopped. Resetting model.");
-		setLosses([]);
-		setInfo(null);
+    lossesRef.current = [];
+    infoRef.current = [];
 		resetModel();
     resetOptimizer();
 	}
@@ -268,6 +271,7 @@ function NetworkVisualizer() {
       return;
     }
 
+    let lastTickUpdate = 0;
 		try {
 			await train(
 				data,
@@ -276,12 +280,20 @@ function NetworkVisualizer() {
         batchSize,
         epochs,
 				trainController.current,
-				({ epoch, batch, loss, info }) => {
-					setLosses((prevLosses) => [
-						...prevLosses,
-						{ epoch, batch, loss }
-					]);
-					setInfo(info);
+        (epoch, batch, loss, info) => {
+
+          lossesRef.current.push(
+            { epoch, batch, loss }
+          );
+
+          infoRef.current = info;
+
+          // update tick every 50ms
+          const now = performance.now();
+          if (now - lastTickUpdate > 50) {
+            lastTickUpdate = now;
+            setTick(tick => tick + 1);
+          }
 				}
 			);
 		} finally {
@@ -316,10 +328,11 @@ function NetworkVisualizer() {
   return (
     <div className="network-visualizer">
       <NetworkViewer 
-				losses={losses} 
-				info={info}
+				losses={lossesRef.current} 
+				info={infoRef.current}
 				isTraining={isTraining} 
         onSampleIndexChange={handleSampleIndexChange}
+        tick={tick}
 			/>
       <Sidebar 
 				onStartTraining={handleStartTraining} 
@@ -334,6 +347,7 @@ function NetworkVisualizer() {
         optimizerType={optimizerType}
         optimizerParams={optimizerParams}
         onOptimizerChange={handleOptimizerChange}
+        tick={tick}
 			/>
     </div>
   );

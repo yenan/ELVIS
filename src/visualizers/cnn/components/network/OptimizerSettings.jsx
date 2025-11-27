@@ -23,12 +23,12 @@ function handleOptimizerChange(event, onChange) {
   onChange(selectedOptimizer, DEFAULT_PARAMS[selectedOptimizer]);
 }
 
-function handleParamChange(param, value, oldParams, onChange) {
+function handleParamChange(param, value, oldParams, optimizerType, onChange) {
   const newParams = {
     ...oldParams,
     [param]: value,
   };
-  onChange(props.optimizer, newParams);
+  onChange(optimizerType, newParams);
 }
 
 
@@ -55,7 +55,7 @@ function OptimizerSettings(props) {
               type="text"
               value={props.params.learningRate}
               onChange={(e) => handleParamChange(
-                'learningRate', e.target.value, props.params, props.onOptimizerChange
+                'learningRate', e.target.value, props.params, props.optimizer, props.onOptimizerChange
               )}
             />
           </div>
@@ -66,7 +66,7 @@ function OptimizerSettings(props) {
               type="text"
               value={props.params.momentum}
               onChange={(e) => handleParamChange(
-                'momentum', e.target.value, props.params, props.onOptimizerChange
+                'momentum', e.target.value, props.params, props.optimizer, props.onOptimizerChange
               )}
             />
           </div>
@@ -77,7 +77,7 @@ function OptimizerSettings(props) {
               type="text"
               value={props.params.batchSize}
               onChange={(e) => handleParamChange(
-                'batchSize', e.target.value, props.params, props.onOptimizerChange
+                'batchSize', e.target.value, props.params, props.optimizer, props.onOptimizerChange
               )}
             />
           </div>
@@ -88,7 +88,7 @@ function OptimizerSettings(props) {
               type="text"
               value={props.params.epochs}
               onChange={(e) => handleParamChange(
-                'epochs', e.target.value, props.params, props.onOptimizerChange
+                'epochs', e.target.value, props.params, props.optimizer, props.onOptimizerChange
               )}
             />
           </div> 
@@ -103,7 +103,7 @@ function OptimizerSettings(props) {
               type="text"
               value={props.params.learningRate}
               onChange={(e) => handleParamChange(
-                'learningRate', e.target.value, props.params, props.onOptimizerChange
+                'learningRate', e.target.value, props.params, props.optimizer, props.onOptimizerChange
               )}
             />
           </div>
@@ -114,7 +114,7 @@ function OptimizerSettings(props) {
               type="text"
               value={props.params.beta1}
               onChange={(e) => handleParamChange(
-                'beta1', e.target.value, props.params, props.onOptimizerChange
+                'beta1', e.target.value, props.params, props.optimizer, props.onOptimizerChange
               )}
             />
           </div>
@@ -125,7 +125,7 @@ function OptimizerSettings(props) {
               type="text"
               value={props.params.beta2}
               onChange={(e) => handleParamChange(
-                'beta2', e.target.value, props.params, props.onOptimizerChange
+                'beta2', e.target.value, props.params, props.optimizer, props.onOptimizerChange
               )}
             />
           </div>
@@ -136,7 +136,7 @@ function OptimizerSettings(props) {
               type="text"
               value={props.params.epsilon}
               onChange={(e) => handleParamChange(
-                'epsilon', e.target.value, props.params, props.onOptimizerChange
+                'epsilon', e.target.value, props.params, props.optimizer, props.onOptimizerChange
               )}
             />
           </div>
@@ -147,7 +147,7 @@ function OptimizerSettings(props) {
               type="text"
               value={props.params.batchSize}
               onChange={(e) => handleParamChange(
-                'batchSize', e.target.value, props.params, props.onOptimizerChange
+                'batchSize', e.target.value, props.params, props.optimizer, props.onOptimizerChange
               )}
             />
           </div>
@@ -158,7 +158,7 @@ function OptimizerSettings(props) {
               type="text"
               value={props.params.epochs}
               onChange={(e) => handleParamChange(
-                'epochs', e.target.value, props.params, props.onOptimizerChange
+                'epochs', e.target.value, props.params, props.optimizer, props.onOptimizerChange
               )}
             />
           </div>

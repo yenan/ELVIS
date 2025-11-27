@@ -26,6 +26,7 @@ function NetworkViewer(props) {
 			<InfoViewer 
         info={props.info} 
         onSampleIndexChange={props.onSampleIndexChange}
+        tick={props.tick}
       />
     </div>
   );

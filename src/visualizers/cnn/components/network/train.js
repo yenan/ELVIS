@@ -119,7 +119,7 @@ class Cnn {
 					info.push({
 						type: "conv2d",
 						output: out.clone(),
-						weights: layer.weights,      // kernel shape: [k,k,inC,outC]
+						weights: layer.weights.clone(),
 						stride: layer.stride,
 						padding: layer.padding
 					});
@@ -165,8 +165,8 @@ class Cnn {
 					info.push({
 						type: "dense",
 						output: out.clone(),
-						weights: layer.weights,
-						biases: layer.biases,
+						weights: layer.weights.clone(),
+						biases: layer.biases.clone(),
 						units: layer.units
 					});
 					break;
@@ -238,12 +238,7 @@ async function train(
 			}
 
 			if (onBatchEnd) {
-				onBatchEnd({
-					epoch: epoch,
-					batch: b,
-					loss: lossVal,
-					info: info
-				});
+				onBatchEnd(epoch, b, lossVal, info);
 			}
 
 			await tf.nextFrame();

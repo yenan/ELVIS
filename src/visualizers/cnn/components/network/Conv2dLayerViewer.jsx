@@ -105,7 +105,7 @@ function Conv2dLayerViewer(props) {
 
   const kernels = useMemo(() => {
     return extractKernels(props.weights, selectedChannel);
-  }, [props.weights, selectedChannel]);
+  }, [props.tick, selectedChannel]);
 
   const kernelSrcs = useMemo(() => {
     return kernels.map(imgDataToSrc);
@@ -113,12 +113,11 @@ function Conv2dLayerViewer(props) {
 
   const activations = useMemo(() => {
     return extractActivationMaps(props.output);
-  }, [props.output]);
+  }, [props.tick]);
 
   const activationSrcs = useMemo(() => {
     return activations.map(imgDataToSrc);
   }, [activations]);
-
 
   return (
     <div className="layer-viewer">
@@ -136,7 +135,7 @@ function Conv2dLayerViewer(props) {
       <div className="layer-grid">
 				{kernelSrcs.map((src, idx) => (
 					<img 
-						key={`${props.key}-${idx}-kernel`} 
+						key={`${props.layerIdx}-${idx}-kernel`} 
 						src={src} 
 						alt={`Kernel ${idx}`} 
 					/>
@@ -147,7 +146,7 @@ function Conv2dLayerViewer(props) {
       <div className="layer-grid">
 				{activationSrcs.map((src, idx) => (
 					<img 
-						key={`${props.key}-${idx}-activation`} 
+						key={`${props.layerIdx}-${idx}-activation`} 
 						src={src} 
 						alt={`Activation Map ${idx}`} 
             onClick={() => setSelectedChannel(idx)}
