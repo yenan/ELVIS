@@ -59,18 +59,18 @@ function MaxPoolLayerViewer(props) {
 
 	return (
 		<div className="layer-viewer">
-		  <h3 className="layer-header">MaxPool Layer</h3>
+		  <h3 className="layer-title">MaxPool Layer</h3>
 
       <div className="layer-details">
         <div><strong>Pool Size:</strong> {props.size}x{props.size}</div>
         <div><strong>Stride:</strong> {props.stride}</div>
       </div>
 
-      <h4>Outputs</h4>
+      <h4>Outputs (min-max normalized)</h4>
       <div className="layer-grid">
 				{activationSrcs.map((src, idx) => (
 					<img 
-						key={idx} 
+						key={`${props.key}-${idx}-output`} 
 						src={src} 
 						alt={`Output ${idx}`} 
 					/>

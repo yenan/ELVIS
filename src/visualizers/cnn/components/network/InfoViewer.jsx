@@ -27,7 +27,7 @@ function InfoViewer(props) {
 			case 'maxpool':
 				return (
 					<MaxPoolLayerViewer 
-						key={idx} 
+            key={idx}
 						stride={layer.stride} 
 						size={layer.size}
 					  output={layer.output}
