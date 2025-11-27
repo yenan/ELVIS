@@ -79,11 +79,6 @@ function updateFunction(
     return;
   }
 
-  xMin -= 0.2 * Math.abs(xMin);
-  xMax += 0.2 * Math.abs(xMax);
-  yMin -= 0.2 * Math.abs(yMin);
-  yMax += 0.2 * Math.abs(yMax);
-
   try {
     const expr = math.compile(functionInput);
     const { xs, ys, zs } = getContourPoints(
@@ -163,12 +158,17 @@ function OptimizationPlot(props) {
         ]}
         layout={{
           autosize: true,
-          xaxis: { scaleanchor: null },
-          yaxis: { scaleanchor: null },
           margin: { t: 20, r: 20, b: 40, l: 50 },
-
-          xaxis: { title: { text: 'x' } },
-          yaxis: { title: { text: 'y' } },
+          xaxis: { 
+            title: { text: 'x' },
+            scaleanchor: null,
+            range: [props.functionXMin, props.functionXMax]
+          },
+          yaxis: { 
+            title: { text: 'y' },
+            scaleanchor: null,
+            range: [props.functionYMin, props.functionYMax]
+          },
           showlegend: false,
         }}
         config={{ responsive: true, displayModeBar: false }}

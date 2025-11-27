@@ -41,9 +41,6 @@ function updateFunction(functionInput, setXs, setYs, xMin, xMax) {
     return;
   }
 
-  xMin -= 0.2 * Math.abs(xMin);
-  xMax += 0.2 * Math.abs(xMax);
-
   try {
     const expr = math.compile(functionInput);
     const { xs, ys } = sampleFunction(expr, xMin, xMax);
@@ -65,6 +62,9 @@ function OptimizationPlot(props) {
 
   const trajX = props.trajectory.map(p => p.x);
   const trajY = props.trajectory.map(p => p.y);
+
+  const minY = Math.min(...ys.filter(y => !isNaN(y))) - 0.1;
+  const maxY = Math.max(...ys.filter(y => !isNaN(y))) + 0.1;
 
   return (
     <div className="plot-wrapper">
@@ -98,8 +98,14 @@ function OptimizationPlot(props) {
           },
         ]}
         layout={{
-          xaxis: { title: { text: 'x' } },
-          yaxis: { title: { text: 'f(x)' } },
+          xaxis: { 
+            title: { text: 'x' },
+            range: [props.functionXMin, props.functionXMax]
+          },
+          yaxis: { 
+            title: { text: 'f(x)' },
+            range: [minY, maxY]
+          },
           margin: { t: 20, r: 20, b: 40, l: 50 },
           showlegend: false,
         }}

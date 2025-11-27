@@ -10,7 +10,7 @@ const math = create(all);
 
 
 function BivariatePage() {
-  const [functionInput, setFunctionInput] = useState("x ^ 2 + 30 * y ^ 2");
+  const [functionInput, setFunctionInput] = useState("x ^ 2 + 3 * y ^ 2");
   const { gradient, hessian } = useDerivatives(functionInput);
   const [functionXMin, setFunctionXMin] = useState("-1");
   const [functionXMax, setFunctionXMax] = useState("1");

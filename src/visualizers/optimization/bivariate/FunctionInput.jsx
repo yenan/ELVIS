@@ -2,7 +2,7 @@ import "../styles.css";
 
 const PRESETS = {
   "-- Custom --": {
-    func: "x ^ 2 + 30 * y ^ 2",
+    func: "x ^ 2 + 3 * y ^ 2",
     min: -1,
     max: 1,
   },
