@@ -23,7 +23,10 @@ function NetworkViewer(props) {
 					yaxis: { title: { text: "Train loss" } },
 				}}
 			/>
-			<InfoViewer info={props.info} />
+			<InfoViewer 
+        info={props.info} 
+        onSampleIndexChange={props.onSampleIndexChange}
+      />
     </div>
   );
 }

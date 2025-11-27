@@ -1,3 +1,4 @@
+import Button from "../../../../components/Button/Button.jsx";
 import "./LayerViewer.css";
 
 
@@ -56,6 +57,7 @@ function InputViewer(props) {
 		    {imgSrc && (
 					<img key={0} src={imgSrc} alt={`Input Image`} />
 		    )}
+        <Button onClick={props.onSampleIndexChange}>New Sample</Button>
 		  </div>
 		</div>
 	);

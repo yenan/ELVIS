@@ -309,12 +309,17 @@ function NetworkVisualizer() {
     }
   }
 
+  function handleSampleIndexChange() {
+    trainController.current.sampleIndex += 1;
+  }
+
   return (
     <div className="network-visualizer">
       <NetworkViewer 
 				losses={losses} 
 				info={info}
 				isTraining={isTraining} 
+        onSampleIndexChange={handleSampleIndexChange}
 			/>
       <Sidebar 
 				onStartTraining={handleStartTraining} 

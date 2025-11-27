@@ -10,6 +10,7 @@ function InfoViewer(props) {
 					<InputViewer
 						key={idx}
 					  output={layer.output}
+            onSampleIndexChange={props.onSampleIndexChange}
 					/>
 				);
 			case 'conv2d':
