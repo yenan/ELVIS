@@ -8,6 +8,10 @@ function FunctionTab(props) {
       <FunctionInput 
         functionInput={props.functionInput} 
         setFunctionInput={props.setFunctionInput}
+        setXMin={props.setXMin}
+        setXMax={props.setXMax}
+        setYMin={props.setYMin}
+        setYMax={props.setYMax}
       />
       <DerivativesDisplay
         gradient={props.gradient}
