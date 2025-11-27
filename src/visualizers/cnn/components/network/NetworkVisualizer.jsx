@@ -201,6 +201,7 @@ function NetworkVisualizer() {
 		const inChannels = data.numInputChannels;
 		const cnn = new Cnn(parseArchitecture(architecture), inChannels);
     modelRef.current = cnn;
+    setTick(tick => tick + 1);
 	}
 
   function resetOptimizer() {
