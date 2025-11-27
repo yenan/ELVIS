@@ -53,7 +53,7 @@ function Sidebar(props) {
       content: (
 				<ArchitectureEditor 
 					architecture={props.architecture}
-					setArchitecture={props.setArchitecture}
+					onChange={props.onArchitectureChange}
 				/>
 			),
     },
