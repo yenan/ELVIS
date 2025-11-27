@@ -201,7 +201,7 @@ function NetworkVisualizer() {
 		const inChannels = data.numInputChannels;
 		const cnn = new Cnn(parseArchitecture(architecture), inChannels);
     modelRef.current = cnn;
-    setTick(tick => tick + 1);
+    updateTick();
 	}
 
   function resetOptimizer() {
@@ -293,7 +293,7 @@ function NetworkVisualizer() {
           const now = performance.now();
           if (now - lastTickUpdate > 50) {
             lastTickUpdate = now;
-            setTick(tick => tick + 1);
+            updateTick();
           }
 				}
 			);
@@ -324,6 +324,11 @@ function NetworkVisualizer() {
 
   function handleSampleIndexChange() {
     trainController.current.sampleIndex += 1;
+    updateTick();
+  }
+
+  function updateTick() {
+    setTick(tick => tick + 1);
   }
 
   return (

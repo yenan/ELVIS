@@ -121,7 +121,8 @@ class Cnn {
 						output: out.clone(),
 						weights: layer.weights.clone(),
 						stride: layer.stride,
-						padding: layer.padding
+						padding: layer.padding,
+            activationType: layer.activationType
 					});
 					break;
 

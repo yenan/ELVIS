@@ -17,6 +17,7 @@ function InfoViewer(props) {
 			case 'conv2d':
 				return (
 					<Conv2dLayerViewer 
+            key={idx}
 						layerIdx={idx} 
 						stride={layer.stride} 
 						padding={layer.padding} 
