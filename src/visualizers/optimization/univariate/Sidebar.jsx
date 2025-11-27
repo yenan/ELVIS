@@ -29,6 +29,8 @@ function Sidebar(props) {
           setOptimizer={props.setOptimizer}
           params={props.optimizerParams}
           setParams={props.setOptimizerParams}
+          xMin={props.functionXMin}
+          xMax={props.functionXMax}
         />
       ),
     },

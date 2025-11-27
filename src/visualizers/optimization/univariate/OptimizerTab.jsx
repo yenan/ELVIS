@@ -1,3 +1,5 @@
+import Button from "../../../components/Button/Button.jsx";
+
 const DEFAULT_PARAMS = {
   gd: { x0: "0.5", learningRate: "0.1", momentum: "0.0" },
   newton: { x0: "0.5" },
@@ -9,6 +11,20 @@ function handleOptimizerChange(
   const selectedOptimizer = event.target.value;
   setOptimizer(selectedOptimizer);
   setParams(DEFAULT_PARAMS[selectedOptimizer]);
+}
+
+function handleRandomX0(params, setParams, min, max) {
+  min = parseFloat(min);
+  max = parseFloat(max);
+  if (isNaN(min) || isNaN(max) || min >= max) {
+    return;
+  }
+
+  const randomX0 = Math.random() * (max - min) + min
+  setParams({
+    ...params,
+    x0: randomX0,
+  });
 }
 
 function OptimizerTab(props) {
@@ -31,17 +47,31 @@ function OptimizerTab(props) {
         <>
           <div className="field">
             <label htmlFor="gd-x0-input">Initial x</label>
-            <input
-              id="gd-x0-input"
-              type="text"
-              value={props.params.x0}
-              onChange={(e) =>
-                props.setParams({
-                  ...props.params,
-                  x0: e.target.value,
-                })
-              }
-            />
+            <div className="input-button">
+              <input
+                id="gd-x0-input"
+                type="text"
+                value={props.params.x0}
+                onChange={(e) =>
+                  props.setParams({
+                    ...props.params,
+                    x0: e.target.value,
+                  })
+                }
+              />
+              <Button
+                onClick={() =>
+                  handleRandomX0(
+                    props.params,
+                    props.setParams,
+                    props.xMin,
+                    props.xMax
+                  )
+                }
+              >
+                Random
+              </Button>
+            </div>
           </div>
           <div className="field">
             <label htmlFor="gd-learning-rate-input">Learning Rate</label>
@@ -76,17 +106,31 @@ function OptimizerTab(props) {
       {props.optimizer === "newton" && (
         <div className="field">
           <label htmlFor="newton-x0-input">Initial x</label>
-          <input
-            id="newton-x0-input"
-            type="text"
-            value={props.params.x0}
-            onChange={(e) =>
-              props.setParams({
-                ...props.params,
-                x0: e.target.value,
-              })
-            }
-          />
+          <div className="input-button">
+            <input
+              id="newton-x0-input"
+              type="text"
+              value={props.params.x0}
+              onChange={(e) =>
+                props.setParams({
+                  ...props.params,
+                  x0: e.target.value,
+                })
+              }
+            />
+            <Button
+              onClick={() =>
+                handleRandomX0(
+                  props.params,
+                  props.setParams,
+                  props.xMin,
+                  props.xMax
+                )
+              }
+            >
+              Random
+            </Button>
+          </div>
         </div>
       )} 
     </div>

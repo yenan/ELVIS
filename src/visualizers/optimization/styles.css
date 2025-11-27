@@ -59,6 +59,12 @@
     color: #4a4f5c;
 }
 
+.input-button {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
 .fieldset {
     border: 1px solid #ccd0dd;
     border-radius: 6px;
