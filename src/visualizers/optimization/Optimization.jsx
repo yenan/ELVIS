@@ -1,6 +1,7 @@
 import './Optimization.css'
 import Tabs from "../../components/Tabs/Tabs.jsx"
 import UnivariatePage from "./univariate/UnivariatePage.jsx"
+import BivariatePage from "./bivariate/BivariatePage.jsx"
 
 
 function Optimization() {
@@ -11,8 +12,7 @@ function Optimization() {
 	  },
 		{
 			label: "Bivariate",
-      // content: <Bivariate />,
-      content: <div>Bivariate Visualizer Placeholder</div>,
+      content: <BivariatePage />,
 		},
 	];
 
