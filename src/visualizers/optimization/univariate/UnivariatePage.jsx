@@ -10,34 +10,17 @@ import "./UnivariatePage.css";
 const math = create(all);
 
 
-function updateFunctionInput(
-  draftFunctionInput, setFunctionInput
-) {
-  try {
-    math.parse(draftFunctionInput);
-    setFunctionInput(draftFunctionInput);
-  } catch (error) {
-    // Invalid function input; do not update
-  }
-}
-
-
 function UnivariatePage() {
-  const [draftFunctionInput, setDraftFunctionInput] = useState("x ^ 2");
   const [functionInput, setFunctionInput] = useState("x ^ 2");
   const { derivative, secondDerivative } = useDerivatives(functionInput);
-  const [functionXMin, setFunctionXMin] = useState(-1);
-  const [functionXMax, setFunctionXMax] = useState(1);
-
-  useEffect(() => {
-    updateFunctionInput(draftFunctionInput, setFunctionInput);
-  }, [draftFunctionInput]);
+  const [functionXMin, setFunctionXMin] = useState("-1");
+  const [functionXMax, setFunctionXMax] = useState("1");
 
   const [optimizer, setOptimizer] = useState("gd");
   const [optimizerParams, setOptimizerParams] = useState({ 
-    learningRate: 0.1, 
-    momentum: 0.0,
-    x0: 0.5
+    learningRate: "0.1", 
+    momentum: "0.0",
+    x0: "0.5"
   });
   // const showSecondDerivative = useShowSecondDerivative(optimizer);
 
@@ -50,6 +33,9 @@ function UnivariatePage() {
     optimizerParams,
     stepCount
   );
+  const currentPoint = trajectory.length > 0 
+    ? trajectory[trajectory.length - 1] 
+    : null;
 
   useEffect(() => {
     setStepCount(0);
@@ -64,8 +50,8 @@ function UnivariatePage() {
         functionXMax={functionXMax}
       />
       <Sidebar 
-        draftFunctionInput={draftFunctionInput} 
-        setDraftFunctionInput={setDraftFunctionInput} 
+        functionInput={functionInput} 
+        setFunctionInput={setFunctionInput} 
         derivative={derivative} 
         secondDerivative={secondDerivative}
         showSecondDerivative={true}
@@ -81,6 +67,8 @@ function UnivariatePage() {
 
         stepCount={stepCount}
         setStepCount={setStepCount}
+        currentY={currentPoint ? currentPoint.y : null}
+        currentDerivative={currentPoint ? currentPoint.grad : null}
       />
     </div>
   )

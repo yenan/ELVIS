@@ -7,8 +7,8 @@ function FunctionInput(props) {
       <input
         id="function-input"
         type="text"
-        value={props.draftFunctionInput}
-        onChange={(e) => props.setDraftFunctionInput(e.target.value)}
+        value={props.functionInput}
+        onChange={(e) => props.setFunctionInput(e.target.value)}
         autoComplete="off"
       />
     </div>

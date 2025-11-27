@@ -9,8 +9,8 @@ function Sidebar(props) {
       label: "Function",
       content: (
         <FunctionTab 
-          draftFunctionInput={props.draftFunctionInput} 
-          setDraftFunctionInput={props.setDraftFunctionInput}
+          functionInput={props.functionInput} 
+          setFunctionInput={props.setFunctionInput}
           derivative={props.derivative}
           secondDerivative={props.secondDerivative}
           showSecondDerivative={props.showSecondDerivative}
@@ -38,6 +38,8 @@ function Sidebar(props) {
         <OptimizeTab 
           stepCount={props.stepCount}
           setStepCount={props.setStepCount}
+          currentY={props.currentY}
+          currentDerivative={props.currentDerivative}
         />
       ),
     },

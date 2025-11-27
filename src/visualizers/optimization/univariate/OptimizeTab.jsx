@@ -5,10 +5,26 @@ function OptimizeTab(props) {
   return (
     <div className="card">
       <div className="field">
-        <label>Current Step Count:</label>
+        <label>Current Step Count</label>
         <input
           type="number"
           value={props.stepCount}
+          readOnly
+        />
+      </div>
+      <div className="field">
+        <label>Current f(x)</label>
+        <input
+          type="text"
+          value={props.currentY.toPrecision(8)}
+          readOnly
+        />
+      </div>
+      <div className="field">
+        <label>Current df/dx</label>
+        <input
+          type="text"
+          value={props.currentDerivative.toPrecision(8)}
           readOnly
         />
       </div>

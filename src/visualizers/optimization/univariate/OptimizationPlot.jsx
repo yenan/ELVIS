@@ -32,10 +32,24 @@ function updateFunction(functionInput, setXs, setYs, xMin, xMax) {
     return;
   }
 
-  const expr = math.compile(functionInput);
-  const { xs, ys } = sampleFunction(expr, xMin, xMax);
-  setXs(xs);
-  setYs(ys);
+  // parse xMin and xMax
+  xMin = parseFloat(xMin);
+  xMax = parseFloat(xMax);
+  if (isNaN(xMin) || isNaN(xMax) || xMin >= xMax) {
+    setXs([]);
+    setYs([]);
+    return;
+  }
+
+  try {
+    const expr = math.compile(functionInput);
+    const { xs, ys } = sampleFunction(expr, xMin, xMax);
+    setXs(xs);
+    setYs(ys);
+  } catch {
+    setXs([]);
+    setYs([]);
+  }
 }
 
 function OptimizationPlot(props) {

@@ -1,6 +1,6 @@
 const DEFAULT_PARAMS = {
-  gd: { x0: 0.5, learningRate: 0.1, momentum: 0.0 },
-  newton: { x0: 0.5 },
+  gd: { x0: "0.5", learningRate: "0.1", momentum: "0.0" },
+  newton: { x0: "0.5" },
 };
 
 function handleOptimizerChange(
@@ -33,12 +33,12 @@ function OptimizerTab(props) {
             <label htmlFor="gd-x0-input">Initial x</label>
             <input
               id="gd-x0-input"
-              type="number"
+              type="text"
               value={props.params.x0}
               onChange={(e) =>
                 props.setParams({
                   ...props.params,
-                  x0: parseFloat(e.target.value),
+                  x0: e.target.value,
                 })
               }
             />
@@ -47,12 +47,12 @@ function OptimizerTab(props) {
             <label htmlFor="gd-learning-rate-input">Learning Rate</label>
             <input
               id="gd-learning-rate-input"
-              type="number"
+              type="text"
               value={props.params.learningRate}
               onChange={(e) =>
                 props.setParams({
                   ...props.params,
-                  learningRate: parseFloat(e.target.value),
+                  learningRate: e.target.value,
                 })
               }
             />
@@ -61,12 +61,12 @@ function OptimizerTab(props) {
             <label htmlFor="gd-momentum-input">Momentum</label>
             <input
               id="gd-momentum-input"
-              type="number"
+              type="text"
               value={props.params.momentum}
               onChange={(e) =>
                 props.setParams({
                   ...props.params,
-                  momentum: parseFloat(e.target.value),
+                  momentum: e.target.value,
                 })
               }
             />
@@ -78,12 +78,12 @@ function OptimizerTab(props) {
           <label htmlFor="newton-x0-input">Initial x</label>
           <input
             id="newton-x0-input"
-            type="number"
+            type="text"
             value={props.params.x0}
             onChange={(e) =>
               props.setParams({
                 ...props.params,
-                x0: parseFloat(e.target.value),
+                x0: e.target.value,
               })
             }
           />
