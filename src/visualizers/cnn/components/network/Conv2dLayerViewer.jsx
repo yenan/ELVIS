@@ -2,9 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import "./LayerViewer.css";
 
 
-function extractKernels(weights, selectedOutputChannel) {
-  const [kh, kw, inC, outC] = weights.shape;
-  const kernels = weights.dataSync();
+function extractKernels(kernels, selectedOutputChannel, kh, kw, inC, outC) {
   let minVal = Infinity;
   let maxVal = -Infinity;
   for (let i = 0; i < kernels.length; ++i) {
@@ -45,13 +43,11 @@ function extractKernels(weights, selectedOutputChannel) {
   return kernelImgDatas;
 }
 
-function extractActivationMaps(output) {
-  const [batchSize, H, W, C] = output.shape;
-  const activations = output.dataSync();
+function extractActivationMaps(output, H, W, C) {
   let minVal = Infinity;
   let maxVal = -Infinity;
-  for (let i = 0; i < activations.length; ++i) {
-    const val = activations[i];
+  for (let i = 0; i < output.length; ++i) {
+    const val = output[i];
     if (val < minVal) {
       minVal = val;
     }
@@ -66,7 +62,7 @@ function extractActivationMaps(output) {
 
     for (let i = 0; i < H; ++i) {
       for (let j = 0; j < W; ++j) {
-        const val = activations[
+        const val = output[
           0 * H * W * C +  // batch index 0
           i * W * C +
           j * C +
@@ -100,11 +96,11 @@ function imgDataToSrc(imgData) {
 function Conv2dLayerViewer(props) {
   const [selectedChannel, setSelectedChannel] = useState(0);
 
-  const [kh, kw, inC, outC] = props.weights.shape;
-  const [batch, H, W, C] = props.output.shape;
+  const [kh, kw, inC, outC] = props.kernelShape;
+  const [batch, H, W, C] = props.outputShape;
 
   const kernels = useMemo(() => {
-    return extractKernels(props.weights, selectedChannel);
+    return extractKernels(props.kernels, selectedChannel, kh, kw, inC, outC);
   }, [props.tick, selectedChannel]);
 
   const kernelSrcs = useMemo(() => {
@@ -112,7 +108,7 @@ function Conv2dLayerViewer(props) {
   }, [kernels]);
 
   const activations = useMemo(() => {
-    return extractActivationMaps(props.output);
+    return extractActivationMaps(props.output, H, W, C);
   }, [props.tick]);
 
   const activationSrcs = useMemo(() => {

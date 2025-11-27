@@ -2,8 +2,7 @@ import "./LayerViewer.css";
 
 function OutputLayerViewer(props) {
   const probs = props.probs;
-  const data = probs?.dataSync();
-  const numClasses = data?.length;
+  const numClasses = probs.length;
 
   return (
     <div className="layer-viewer">
@@ -17,7 +16,7 @@ function OutputLayerViewer(props) {
       <div className="layer-grid output-layer-grid">
         {Array.from({ length: numClasses }).map((_, i) => (
           <div key={i} className="output-class-probability">
-            <strong>Class {i}:</strong> {(data[i] * 100).toFixed(2)}%
+            <strong>Class {i}:</strong> {(probs[i] * 100).toFixed(2)}%
           </div>
         ))}
       </div>

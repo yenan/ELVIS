@@ -11,6 +11,7 @@ function InfoViewer(props) {
 					<InputViewer
 						key={idx}
 					  output={layer.output}
+						shape={layer.shape}
             onSampleIndexChange={props.onSampleIndexChange}
             tick={props.tick}
 					/>
@@ -23,8 +24,10 @@ function InfoViewer(props) {
 						stride={layer.stride} 
 						padding={layer.padding} 
 						activationType={layer.activationType}
-						weights={layer.weights} 
+						kernels={layer.kernels} 
 					  output={layer.output}
+						kernelShape={layer.kernelShape}
+						outputShape={layer.outputShape}
 					  type={layer.type}
             tick={props.tick}
 					/>
@@ -36,6 +39,7 @@ function InfoViewer(props) {
 						stride={layer.stride} 
 						size={layer.size}
 					  output={layer.output}
+						shape={layer.shape}
             tick={props.tick}
 					/>
 				);

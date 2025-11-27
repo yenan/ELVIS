@@ -102,9 +102,11 @@ class Cnn {
 		let out = x;
 		const info = [];
 
+		const inputShape = x.shape;
 		info.push({
 			type: "input",
-			output: out.clone()
+			output: out.dataSync(),
+			shape: inputShape
 		});
 
 		for (const layer of this.architecture) {
@@ -118,8 +120,10 @@ class Cnn {
 
 					info.push({
 						type: "conv2d",
-						output: out.clone(),
-						weights: layer.weights.clone(),
+						output: out.dataSync(),
+						kernels: layer.weights.dataSync(),
+						outputShape: out.shape,
+						kernelShape: layer.weights.shape,
 						stride: layer.stride,
 						padding: layer.padding,
             activationType: layer.activationType
@@ -131,7 +135,8 @@ class Cnn {
 
 					info.push({
 						type: "maxpool",
-						output: out.clone(),
+						output: out.dataSync(),
+						shape: out.shape,
 						size: layer.size,
 						stride: layer.stride
 					});
@@ -143,7 +148,8 @@ class Cnn {
 
 					info.push({
 						type: "flatten",
-						output: out.clone()
+						output: out.dataSync(),
+						shape: out.shape
 					});
 
 					// dense init
@@ -165,9 +171,12 @@ class Cnn {
 
 					info.push({
 						type: "dense",
-						output: out.clone(),
-						weights: layer.weights.clone(),
-						biases: layer.biases.clone(),
+						output: out.dataSync(),
+						weights: layer.weights.dataSync(),
+						biases: layer.biases.dataSync(),
+						outputShape: out.shape,
+						weightShape: layer.weights.shape,
+						biasShape: layer.biases.shape,
 						units: layer.units
 					});
 					break;
@@ -234,10 +243,14 @@ async function train(
 			);
 
       // Add output layer info
-      const probs = tf.softmax(output);
+      const probs = tf.tidy(() => {
+				return tf.softmax(output);
+			});
+			const shape = probs.shape;
       info.push({
         type: "output",
-        output: probs.clone()
+        output: probs.dataSync(),
+				shape: shape
       });
 
 			if (controller.stopRequested) {

@@ -2,14 +2,12 @@ import Button from "../../../../components/Button/Button.jsx";
 import "./LayerViewer.css";
 
 
-function extractImage(output) {
-  const [batchSize, H, W, C] = output.shape;
-  const data = output.dataSync();
+function extractImage(output, H, W, C) {
   const buffer = new Uint8ClampedArray(H * W * 4);
   for (let i = 0; i < H; ++i) {
     for (let j = 0; j < W; ++j) {
       for (let c = 0; c < C; ++c) {
-        const val = data[
+        const val = output[
           0 * H * W * C +  // batch index 0
           i * W * C +
           j * C +
@@ -39,9 +37,9 @@ function imgDataToSrc(imgData) {
 
 
 function InputViewer(props) {
-	const [batchSize, H, W, C] = props.output.shape;
+	const [batchSize, H, W, C] = props.shape;
 
-	const imgData = extractImage(props.output);
+	const imgData = extractImage(props.output, H, W, C);
 	const imgSrc = imgDataToSrc(imgData);
 
 	return (
