@@ -4,6 +4,7 @@ import decisionBoundaryImage from "./assets/decision_boundary.svg";
 import regularizationImage from "./assets/regularization.png";
 import gaussianProcessesImage from "./assets/gaussian_processes.png";
 import mlpImage from "./assets/mlp.png";
+import optimizationImage from "./assets/optimization.png"
 
 
 function VisualizerSelector() {
@@ -36,7 +37,11 @@ function VisualizerSelector() {
         </a>
         <Link to="/optimization">
           <div className="cell">
-            Optimization Trajectory
+            Optimization
+            <img
+              src={optimizationImage}
+              alt="Optimization Image"
+            />
           </div>
         </Link>
         <a href="https://huggingface.co/spaces/elvis-hf/gp_visualizer">
@@ -60,6 +65,7 @@ function VisualizerSelector() {
         <Link to="/cnn">
           <div className="cell">
             CNN
+            
           </div>
         </Link>
       </div>
