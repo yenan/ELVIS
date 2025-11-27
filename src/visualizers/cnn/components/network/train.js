@@ -233,6 +233,13 @@ async function train(
 				)
 			);
 
+      // Add output layer info
+      const probs = tf.softmax(output);
+      info.push({
+        type: "output",
+        output: probs.clone()
+      });
+
 			if (controller.stopRequested) {
 				console.log("Training stopped");
 				return;

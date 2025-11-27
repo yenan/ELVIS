@@ -1,6 +1,7 @@
 import Conv2dLayerViewer from "./Conv2dLayerViewer.jsx";
 import MaxPoolLayerViewer from "./MaxPoolLayerViewer.jsx";
 import InputViewer from "./InputViewer.jsx";
+import OutputLayerViewer from "./OutputLayerViewer.jsx";
 
 function InfoViewer(props) {
 	function renderLayer(layer, idx) {
@@ -49,9 +50,16 @@ function InfoViewer(props) {
 
 	return (
 		<div>
-		  {props.info && props.info.map((layer, idx) => (
+		  {props.info && props.info.slice(0, -1).map((layer, idx) => (
 				renderLayer(layer, idx)
 			))}
+      {props.info && props.info.length > 0 && (
+        <OutputLayerViewer
+          probs={props.info[props.info.length - 1]?.output}
+          tick={props.tick}
+        />
+      )
+      }
 		</div>
 	);
 }
