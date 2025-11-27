@@ -1,6 +1,7 @@
 import Tabs from "../../../../components/Tabs/Tabs.jsx";
 import Button from "../../../../components/Button/Button.jsx";
 import ArchitectureEditor from "./ArchitectureEditor.jsx";
+import OptimizerSettings from "./OptimizerSettings.jsx";
 
 function Sidebar(props) {
   const tabData = [
@@ -59,7 +60,13 @@ function Sidebar(props) {
     },
     {
       label: "Optimization",
-      content: <div>Optimization Parameters</div>,
+      content: (
+        <OptimizerSettings 
+          optimizer={props.optimizerType}
+          params={props.optimizerParams}
+          onOptimizerChange={props.onOptimizerChange}
+        />
+      ),
     },
   ];
 

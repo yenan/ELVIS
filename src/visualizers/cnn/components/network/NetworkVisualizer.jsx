@@ -32,6 +32,7 @@ stride=1 padding=1 activation=relu]
 [dense units=10 activation=softmax]`
 );
 
+
 function parseValue(raw) {
   // Try to parse as number; if NaN, keep as string
   if (raw.trim() === "") {
@@ -94,16 +95,22 @@ function NetworkVisualizer() {
 	const [data, setData] = useState(null);
 
   // optimization states
-  const [learningRate, setLearningRate] = useState(0.01);
-	const [batchSize, setBatchSize] = useState(64);
-	const [epochs, setEpochs] = useState(5);
-	const [optimizer, setOptimizer] = useState(null);
+	const [optimizerType, setOptimizerType] = useState("adam");
+  const [optimizerParams, setOptimizerParams] = useState(
+    {
+      learningRate: "0.001",
+      beta1: "0.9",
+      beta2: "0.999",
+      epsilon: "1e-8",
+      batchSize: "32",
+      epochs: "5",
+    }
+  );
   
   // architecture states
   const [architecture, setArchitecture] = useState(DEFAULT_ARCHITECTURE);
 
   // training states
-  const [model, setModel] = useState(null);
 	const [losses, setLosses] = useState([]);
 	const [isTraining, setIsTraining] = useState(false);
 	const trainController = useRef({
@@ -111,6 +118,8 @@ function NetworkVisualizer() {
 		stopRequested: false,
 		sampleIndex: 0,
 	});
+  const modelRef = useRef(null);
+  const optimizerRef = useRef(null);
 
 	// training visualization
 	const [info, setInfo] = useState(null);
@@ -127,7 +136,8 @@ function NetworkVisualizer() {
 	// init model
 	useEffect(() => {
 		resetModel();
-	}, [architecture, data, learningRate]);
+    resetOptimizer();
+	}, [architecture, data, optimizerType, optimizerParams]);
 
 	function handleStartTraining() {
 		console.log("Starting training...");
@@ -173,6 +183,7 @@ function NetworkVisualizer() {
 		setLosses([]);
 		setInfo(null);
 		resetModel();
+    resetOptimizer();
 	}
 
 	function resetModel() {
@@ -180,15 +191,63 @@ function NetworkVisualizer() {
 			return;
 		}
 
+    if (modelRef.current) {
+      modelRef.current.dispose();
+    }
+
 		const inChannels = data.numInputChannels;
 		const cnn = new Cnn(parseArchitecture(architecture), inChannels);
-		setModel(cnn);
-		const opt = tf.train.adam(learningRate);
-		setOptimizer(opt);
+    modelRef.current = cnn;
 	}
 
+  function resetOptimizer() {
+    if (optimizerType === "adam") {
+      const learningRate = parseFloat(optimizerParams.learningRate);
+      const beta1 = parseFloat(optimizerParams.beta1);
+      const beta2 = parseFloat(optimizerParams.beta2);
+      const epsilon = parseFloat(optimizerParams.epsilon);
+
+      if (Number.isNaN(learningRate) || learningRate <= 0) {
+        alert("Invalid learning rate for Adam optimizer.");
+        return;
+      }
+      if (Number.isNaN(beta1) || beta1 < 0) {
+        alert("Invalid beta1 for Adam optimizer.");
+        return;
+      }
+      if (Number.isNaN(beta2) || beta2 < 0) {
+        alert("Invalid beta2 for Adam optimizer.");
+        return;
+      }
+      if (Number.isNaN(epsilon) || epsilon <= 0) {
+        alert("Invalid epsilon for Adam optimizer.");
+        return;
+      } 
+
+      const opt = tf.train.adam(learningRate, beta1, beta2, epsilon);
+      if (optimizerRef.current) {
+        optimizerRef.current.dispose();
+      }
+      optimizerRef.current = opt;
+    } else if (optimizerType === "sgd") {
+      const learningRate = parseFloat(optimizerParams.learningRate);
+      if (Number.isNaN(learningRate) || learningRate <= 0) {
+        alert("Invalid learning rate for SGD optimizer.");
+        return;
+      }
+
+      const opt = tf.train.sgd(learningRate);
+      if (optimizerRef.current) {
+        optimizerRef.current.dispose();
+      }
+      optimizerRef.current = opt;
+    } else {
+      alert(`Unsupported optimizer type: ${optimizerType}`);
+    }
+  }
+
 	async function startTraining() {
-		if (!model || !data || !optimizer || isTraining) {
+		if (!modelRef || !data || !optimizerRef || isTraining) {
 			return;
 		}
 
@@ -196,13 +255,26 @@ function NetworkVisualizer() {
 		trainController.current.isPaused = false;
 		trainController.current.stopRequested = false;
 
+    const batchSize = parseFloat(optimizerParams.batchSize);
+    if (Number.isNaN(batchSize) || batchSize <= 0) {
+      alert("Invalid batch size.");
+      setIsTraining(false);
+      return;
+    }
+    const epochs = parseFloat(optimizerParams.epochs);
+    if (Number.isNaN(epochs) || epochs <= 0) {
+      alert("Invalid number of epochs.");
+      setIsTraining(false);
+      return;
+    }
+
 		try {
 			await train(
 				data,
-				model,
-				optimizer,
-				batchSize,
-				epochs,
+				modelRef.current,
+				optimizerRef.current,
+        batchSize,
+        epochs,
 				trainController.current,
 				({ epoch, batch, loss, info }) => {
 					setLosses((prevLosses) => [
@@ -228,6 +300,15 @@ function NetworkVisualizer() {
     }
   }
 
+  function handleOptimizerChange(newOptimizerType, newOptimizerParams) {
+    if (isTraining) {
+      alert("Cannot change optimizer settings while training is in progress.");
+    } else {
+      setOptimizerType(newOptimizerType);
+      setOptimizerParams(newOptimizerParams);
+    }
+  }
+
   return (
     <div className="network-visualizer">
       <NetworkViewer 
@@ -245,6 +326,9 @@ function NetworkVisualizer() {
 		    isPaused={trainController.current.isPaused}
 		    architecture={architecture}
 				onArchitectureChange={handleArchitectureChange}
+        optimizerType={optimizerType}
+        optimizerParams={optimizerParams}
+        onOptimizerChange={handleOptimizerChange}
 			/>
     </div>
   );

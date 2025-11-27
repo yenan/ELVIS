@@ -47,6 +47,17 @@ class Cnn {
     return weights;
   }
 
+  dispose() {
+    for (const layer of this.architecture) {
+      if (layer.type === 'conv2d') {
+        layer.weights.dispose();
+      } else if (layer.type === 'dense') {
+        if (layer.weights) layer.weights.dispose();
+        if (layer.biases) layer.biases.dispose();
+      }
+    }
+  }
+
   forward(x) {
     let out = x;
 
