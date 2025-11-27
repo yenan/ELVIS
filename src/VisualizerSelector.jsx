@@ -5,6 +5,7 @@ import regularizationImage from "./assets/regularization.png";
 import gaussianProcessesImage from "./assets/gaussian_processes.png";
 import mlpImage from "./assets/mlp.png";
 import optimizationImage from "./assets/optimization.png"
+import cnnImage from "./assets/cnn.png"
 
 
 function VisualizerSelector() {
@@ -65,7 +66,10 @@ function VisualizerSelector() {
         <Link to="/cnn">
           <div className="cell">
             CNN
-            
+            <img
+              src={cnnImage}
+              alt="CNN Image"
+            />
           </div>
         </Link>
       </div>
