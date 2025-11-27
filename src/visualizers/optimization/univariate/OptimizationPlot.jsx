@@ -60,6 +60,9 @@ function OptimizationPlot(props) {
     updateFunction(props.functionInput, setXs, setYs, props.functionXMin, props.functionXMax);
   }, [props.functionInput, props.functionXMin, props.functionXMax]);
 
+  const trajX = props.trajectory.map(p => p.x);
+  const trajY = props.trajectory.map(p => p.y);
+
   return (
     <div className="plot-wrapper">
       <Plot 
@@ -73,13 +76,23 @@ function OptimizationPlot(props) {
             hoverinfo: 'skip',
           },
           {
-            x: props.trajectory.map(p => p.x),
-            y: props.trajectory.map(p => p.y),
+            x: trajX,
+            y: trajY,
             type: 'scatter',
             mode: 'lines+markers',
-            line: { color: 'red', width: 2 },
-            marker: { color: 'red', size: 10 },
-          }
+            line: { color: '#ccc393', width: 2 },
+            marker: { color: '#ccc393', size: 10 },
+            hoverinfo: 'skip',
+          },
+          {
+            x: [trajX.at(-1)],
+            y: [trajY.at(-1)],
+            type: 'scatter',
+            mode: 'markers',
+            line: { color: 'orange', width: 2 },
+            marker: { color: 'orange', size: 12 },
+            hoverinfo: 'skip',
+          },
         ]}
         layout={{
           xaxis: { title: { text: 'x' } },
