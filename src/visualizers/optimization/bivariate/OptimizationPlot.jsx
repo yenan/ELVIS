@@ -143,8 +143,8 @@ function OptimizationPlot(props) {
             y: trajY,
             type: 'scatter',
             mode: 'lines+markers',
-            line: { color: '#ccc393', width: 2 },
-            marker: { color: '#ccc393', size: 10 },
+            line: { color: '#d97871', width: 2 },
+            marker: { color: '#d97871', size: 10 },
             hoverinfo: 'skip',
           },
           {
@@ -152,7 +152,7 @@ function OptimizationPlot(props) {
             y: [trajY.at(-1)],
             type: 'scatter',
             mode: 'markers',
-            marker: { color: 'orange', size: 12 },
+            marker: { color: 'red', size: 12 },
             hoverinfo: 'skip',
           },
         ]}
