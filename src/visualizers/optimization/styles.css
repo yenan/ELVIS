@@ -48,6 +48,7 @@
     font-size: 0.95rem;
     font-family: inherit;
     background-color: #fafafe;
+    height: 1.5em;
 }
 
 .field textarea {
