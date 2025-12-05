@@ -19,8 +19,8 @@ function handleRandomInit(
   const randomY0 = Math.random() * (yMax - yMin) + yMin
   setParams({
     ...params,
-    x0: randomX0,
-    y0: randomY0,
+    x0: randomX0.toPrecision(4),
+    y0: randomY0.toPrecision(4),
   });
 }
 

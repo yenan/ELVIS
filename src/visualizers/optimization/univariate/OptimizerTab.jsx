@@ -23,7 +23,7 @@ function handleRandomX0(params, setParams, min, max) {
   const randomX0 = Math.random() * (max - min) + min
   setParams({
     ...params,
-    x0: randomX0,
+    x0: randomX0.toPrecision(4),
   });
 }
 
