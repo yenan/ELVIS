@@ -4,7 +4,6 @@
     border: 1px solid #dcdfe6;
     border-radius: 12px;
     padding: 12px;
-    /* box-shadow: 0 10px 40px rgba(47, 61, 103, 0.08); */
 }
 
 .plot {
@@ -23,7 +22,6 @@
     flex-direction: column;
     gap: 24px;
     width: 300px;
-    /* box-shadow: 0 10px 40px rgba(47, 61, 103, 0.08); */
 }
 
 .field {
