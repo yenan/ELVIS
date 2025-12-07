@@ -5,24 +5,8 @@ import Sidebar from "./Sidebar.jsx";
 import { load, train, Cnn } from "./train.js";
 import './NetworkVisualizer.css';
 
-// const DEFAULT_ARCHITECTURE = [
-//   { type: "conv2d", filters: 8, kernel: 5, stride: 1, padding: 1, activationType: "relu" },
-//   { type: "maxpool", size: 2, stride: 2 },
-//
-//   { type: "conv2d", filters: 16, kernel: 5, stride: 1, padding: 1 , activationType: "relu"},
-//   { type: "maxpool", size: 2, stride: 2 },
-//
-//   { type: "flatten" },
-//   { type: "dense", units: 10, activationType: "softmax" },
-// ];
-
 const DEFAULT_ARCHITECTURE = (
-`[conv2d filters=8 kernel=5 
-stride=1 padding=1 activation=relu]
-
-[maxpool size=2 stride=2]
-
-[conv2d filters=16 kernel=5 
+`[conv2d filters=8 kernel=11 
 stride=1 padding=1 activation=relu]
 
 [maxpool size=2 stride=2]
