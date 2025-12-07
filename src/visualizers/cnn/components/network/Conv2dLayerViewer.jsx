@@ -94,16 +94,22 @@ function imgDataToSrc(imgData) {
 }
 
 function Conv2dLayerViewer(props) {
-  const [selectedChannel, setSelectedChannel] = useState(0);
+  const [selectedChannel, setSelectedChannel] = useState(null);
 
   const [kh, kw, inC, outC] = props.kernelShape;
   const [batch, H, W, C] = props.outputShape;
 
   const kernels = useMemo(() => {
+		if (selectedChannel == null) {
+			return null;
+		}
     return extractKernels(props.kernels, selectedChannel, kh, kw, inC, outC);
   }, [props.tick, selectedChannel]);
 
   const kernelSrcs = useMemo(() => {
+		if (kernels == null) {
+			return null;
+		}
     return kernels.map(imgDataToSrc);
   }, [kernels]);
 
@@ -127,16 +133,20 @@ function Conv2dLayerViewer(props) {
         <div><strong>Output channels:</strong> {C}</div>
       </div>
 
-      <h4>Kernel for output {selectedChannel} (min-max normalized)</h4>
-      <div className="layer-grid">
-				{kernelSrcs.map((src, idx) => (
-					<img 
-						key={`${props.layerIdx}-${idx}-kernel`} 
-						src={src} 
-						alt={`Kernel ${idx}`} 
-					/>
-				))}
-      </div>
+			{selectedChannel != null && (
+				<>
+					<h4>Kernel for output {selectedChannel} (min-max normalized)</h4>
+					<div className="layer-grid">
+						{kernelSrcs.map((src, idx) => (
+							<img 
+								key={`${props.layerIdx}-${idx}-kernel`} 
+								src={src} 
+								alt={`Kernel ${idx}`} 
+							/>
+						))}
+					</div>
+				</>
+			)}
 
       <h4>Activation Maps (min-max normalized)</h4>
       <div className="layer-grid">
@@ -145,7 +155,9 @@ function Conv2dLayerViewer(props) {
 						key={`${props.layerIdx}-${idx}-activation`} 
 						src={src} 
 						alt={`Activation Map ${idx}`} 
-            onClick={() => setSelectedChannel(idx)}
+            onClick={() => 
+							setSelectedChannel(selectedChannel === idx ? null : idx)
+						}
             style={{border: selectedChannel === idx ? '4px solid lime' : 'none'}}
 					/>
 				))}
