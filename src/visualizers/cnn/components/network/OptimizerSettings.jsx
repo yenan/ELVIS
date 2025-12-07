@@ -164,6 +164,29 @@ function OptimizerSettings(props) {
           </div>
         </>
       )}
+			{ !props.isTraining && (
+				<>
+					<button onClick={props.onStartTraining}>
+						Start Training
+					</button>
+					<button onClick={props.onResetTraining}>
+						Reset Training
+					</button>
+				</>
+			)}
+			{ props.isTraining && (
+				<>
+					<button onClick={props.onPauseTraining}>
+						Pause Training
+					</button>
+					<button onClick={props.onContinueTraining}>
+						Continue Training
+					</button>
+					<button onClick={props.onStopTraining}>
+						Stop Training
+					</button>
+				</>
+			)}
     </div> 
   );
 }

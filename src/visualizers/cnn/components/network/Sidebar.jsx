@@ -6,38 +6,6 @@ import OptimizerSettings from "./OptimizerSettings.jsx";
 function Sidebar(props) {
   const tabData = [
     {
-      label: "Train",
-      content: (
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-					{ !props.isTraining && (
-							<>
-								<Button onClick={props.onStartTraining}>
-									Start Training
-								</Button>
-								<Button onClick={props.onResetTraining}>
-									Reset Training
-								</Button>
-							</>
-						)
-					}
-					{ props.isTraining && (
-							<>
-								<Button onClick={props.onPauseTraining}>
-									Pause Training
-								</Button>
-								<Button onClick={props.onContinueTraining}>
-									Continue Training
-								</Button>
-								<Button onClick={props.onStopTraining}>
-									Stop Training
-								</Button>
-							</>
-						)
-					}
-        </div>
-      ),
-    },
-    {
       label: "Dataset",
       content: (
         <div>
@@ -59,13 +27,21 @@ function Sidebar(props) {
 			),
     },
     {
-      label: "Optimization",
+      label: "Optimize",
       content: (
-        <OptimizerSettings 
-          optimizer={props.optimizerType}
-          params={props.optimizerParams}
-          onOptimizerChange={props.onOptimizerChange}
-        />
+				<>
+					<OptimizerSettings 
+						optimizer={props.optimizerType}
+						params={props.optimizerParams}
+						onOptimizerChange={props.onOptimizerChange}
+						onStartTraining={props.onStartTraining}
+				    onResetTraining={props.onResetTraining}
+				    onPauseTraining={props.onPauseTraining}
+				    onContinueTraining={props.onContinueTraining}
+				    onStopTraining={props.onStopTraining}
+				    isTraining={props.isTraining}
+					/>
+				</>
       ),
     },
   ];
@@ -73,7 +49,7 @@ function Sidebar(props) {
   return (
     <div className="sidebar">
       <Tabs
-        defaultTab="Train"
+        defaultTab="Dataset"
         tabs={tabData}
       />
     </div>
