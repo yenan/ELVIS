@@ -6,7 +6,7 @@ function OutputLayerViewer(props) {
 
   return (
     <div className="layer-viewer">
-      <h3 className="layer-title">Output Layer</h3>
+      <h3 className="layer-title">Output Layer (softmax)</h3>
 
       <div className="layer-details">
         <div><strong>Number of Classes:</strong> {numClasses}</div>
@@ -16,7 +16,7 @@ function OutputLayerViewer(props) {
       <div className="layer-grid output-layer-grid">
         {Array.from({ length: numClasses }).map((_, i) => (
           <div key={i} className="output-class-probability">
-            <strong>Class {i}:</strong> {(probs[i] * 100).toFixed(2)}%
+            <strong>Class {i}:</strong> {(probs[i]).toFixed(2)}
           </div>
         ))}
       </div>
