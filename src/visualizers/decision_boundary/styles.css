@@ -1,0 +1,12 @@
+.visualizer-container {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 20px;
+}
+
+.plot-container {
+	background-color: #fff;
+	border: 1px solid #dcdfe6;
+	border-radius: 12px;
+	padding: 12px;
+}

@@ -18,7 +18,7 @@ function VisualizerSelector() {
         Interactive ML Visualisations
       </h3>
       <div className="grid">
-        <a href="https://huggingface.co/spaces/elvis-hf/interactive_decision_boundary">
+        <Link to="/decision-boundary">
           <div className="cell">
             Decision Boundary
             <img 
@@ -26,7 +26,7 @@ function VisualizerSelector() {
               alt="Decision Boundary Image"
             />
           </div>
-        </a>
+        </Link>
         <a href="https://huggingface.co/spaces/elvis-hf/regularization">
           <div className="cell">
             Regularization
