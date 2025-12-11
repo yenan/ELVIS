@@ -182,7 +182,10 @@ function DecisionBoundary() {
 
         <Sidebar 
           dataSource={dataSource}
-          setDataSource={setDataSource}
+          setDataSource={(source) => {
+            setDataSource(source);
+            setDataset({});
+          }}
 
           pointLabel={pointLabel}
           setPointLabel={setPointLabel}
