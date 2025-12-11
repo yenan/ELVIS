@@ -3,6 +3,21 @@ import Plot from "react-plotly.js";
 
 function ClickablePlot(props) {
   const plotRef = useRef(null);
+  const layoutRef = useRef({
+    width: 900,
+    height: 600,
+    dragmode: "pan",
+    xaxis: { 
+      range: [props.xMin, props.xMax],
+      automargin: true,
+    },
+    yaxis: { 
+      range: [props.yMin, props.yMax],
+      automargin: true,
+    },
+    margin: { t: 0, b: 0, l: 0, r: 0 },
+  });
+
   const [points, setPoints] = useState([]);
 
   useEffect(() => {
@@ -68,14 +83,7 @@ function ClickablePlot(props) {
 			<Plot
 				ref={plotRef}
 				data={[trace]}
-				layout={{
-					width: 900,
-					height: 600,
-					dragmode: "zoom",
-					xaxis: { range: [props.xMin, props.xMax] },
-					yaxis: { range: [props.yMin, props.yMax] },
-					margin: { l: 15 , r: 15, b: 15, t: 15 }
-				}}
+				layout={layoutRef.current}
 				config={{
 					scrollZoom: true,
 					displayModeBar: false
