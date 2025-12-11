@@ -2,21 +2,37 @@ import { Matrix } from 'ml-matrix';
 import LogisticRegression from 'ml-logistic-regression';
 import KNN from 'ml-knn';
 
-class Model {
-  constructor(modelType, hyperparameters = {}) {
-    this.modelType = modelType;
-    this.hyperparameters = hyperparameters;
 
+const DEFAULT_HYPERPARAMETERS = {
+  KNN: { k: "3" },
+  LogisticRegression: { numSteps: "50000", learningRate: "0.0005" },
+};
+
+
+function getModel(modelType, hyperparameters) {
+  if (modelType === "KNN") {
+    return new KnnModel(hyperparameters);
+  } else if (modelType === "LogisticRegression") {
+    return new LogisticRegressionModel(hyperparameters);
+  } else {
+    throw new Error(`Unsupported model type: ${modelType}`);
+  }
+}
+
+
+class BaseModel {
+  constructor(hyperparameters) {
     this.labelToInt = {};
     this.intToLabel = {};
+    this.hyperparameters = hyperparameters;
+  }
 
-    if (modelType === 'KNN') {
-      this._model = null; // KNN will be initialized during training
-    } else if (modelType === "LogisticRegression") {
-      this._model = new LogisticRegression(hyperparameters);
-    } else {
-      throw new Error(`Unsupported model type: ${modelType}`);
-    }
+  train(X, y) {
+    throw new Error("train() method must be implemented by subclasses.");
+  }
+
+  predict(X) {
+    throw new Error("predict() method must be implemented by subclasses.");
   }
 
   _buildLabelMappings(y) {
@@ -27,26 +43,67 @@ class Model {
       this.intToLabel[index] = label;
     });
   }
+}
+
+class KnnModel extends BaseModel {
+  constructor(hyperparameters) {
+    super(hyperparameters);
+    this._processHyperparameters();
+    this._model = null;
+  }
+
+  _processHyperparameters() {
+    this.hyperparameters.k = parseInt(this.hyperparameters.k) || 3;
+  }
+
+  train(X, y) {
+    this._buildLabelMappings(y);
+    let yInt = y.map(label => this.labelToInt[label]);
+    this._model = new KNN(X, yInt, this.hyperparameters);
+  }
+
+  predict(X) {
+    if (!this._model) {
+      console.error("Model has not been trained yet.");
+      return null;
+    }
+
+    const predictionsInt = this._model.predict(X);
+    const predictions = predictionsInt.map(intLabel => this.intToLabel[intLabel]);
+    return predictions;
+  }
+}
+
+
+class LogisticRegressionModel extends BaseModel {
+  constructor(hyperparameters) {
+    super(hyperparameters);
+    this._processHyperparameters();
+    this._model = new LogisticRegression(hyperparameters);
+  }
+
+  _processHyperparameters() {
+    this.hyperparameters.numSteps = parseInt(this.hyperparameters.numSteps) || 50000;
+    this.hyperparameters.learningRate = parseFloat(this.hyperparameters.learningRate) || 5e-4;
+  }
 
   train(X, y) {
     this._buildLabelMappings(y);
 
     let yInt = y.map(label => this.labelToInt[label]);
+    X = new Matrix(X);
+    yInt = Matrix.columnVector(yInt);
 
-    if (this.modelType === 'KNN') {
-      this._model = new KNN(X, yInt, this.hyperparameters);
-    } else {
-      X = new Matrix(X);
-      yInt = Matrix.columnVector(yInt);
-      this._model.train(X, yInt);
-    }
+    this._model.train(X, yInt);
   }
 
   predict(X) {
-    if (this.modelType !== 'KNN') {
-      X = new Matrix(X);
+    if (!this._model) {
+      console.error("Model has not been trained yet.");
+      return null;
     }
-      
+
+    X = new Matrix(X);
     const predictionsInt = this._model.predict(X);
     const predictions = predictionsInt.map(intLabel => this.intToLabel[intLabel]);
     return predictions;
@@ -54,4 +111,5 @@ class Model {
 
 }
 
-export default Model;
+
+export { getModel, DEFAULT_HYPERPARAMETERS };

@@ -1,9 +1,9 @@
-import Model from './model.js';
+import { getModel, DEFAULT_HYPERPARAMETERS } from './model.js';
 import { useState } from 'react';
 
 
 function getDataForTraining(dataset, dataSource, pallette = null) {
-  if (!dataset) {
+  if (!dataset || Object.keys(dataset).length === 0) {
     return null;
   }
 
@@ -32,7 +32,7 @@ function handleTrainModel(dataset, modelType, hyperparameters, setModel) {
   }
   
   const { X, y } = data;
-  const model = new Model(modelType, hyperparameters);
+  const model = getModel(modelType, hyperparameters);
   model.train(X, y);
 
   setModel(model);
@@ -40,12 +40,35 @@ function handleTrainModel(dataset, modelType, hyperparameters, setModel) {
 
 function ModelTab(props) {
   const [modelType, setModelType] = useState("KNN");
-  const [hyperparameters, setHyperparameters] = useState({k: 3});
+  const [hyperparameters, setHyperparameters] = useState(DEFAULT_HYPERPARAMETERS["KNN"]);
 
   return (
-    <div>
-      <h2>Model Settings</h2>
-      <p>Model configuration options will go here.</p>
+    <div className="card">
+      <div className="field">
+        <label className="label">Model Type</label>
+        <select
+          value={modelType}
+          onChange={(e) => {
+            setModelType(e.target.value)
+            setHyperparameters(DEFAULT_HYPERPARAMETERS[e.target.value])
+          }}
+        >
+          <option value="KNN">K-Nearest Neighbors</option>
+          <option value="LogisticRegression">Logistic Regression</option>
+        </select>
+      </div>
+
+      {Object.entries(hyperparameters).map(([param, value]) => (
+        <div className="field" key={param}>
+          <label className="label">{param}</label>
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => setHyperparameters({...hyperparameters, [param]: e.target.value})}
+          />
+        </div>
+      ))}
+
       <button 
         onClick={() => {
           handleTrainModel(
