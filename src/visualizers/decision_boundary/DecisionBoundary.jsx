@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import ClickablePlot from "./ClickablePlot.jsx";
 import Sidebar from "./Sidebar.jsx";
 import { OKABE_ITO_COLORS } from "./colors.js";
@@ -158,6 +158,11 @@ function DecisionBoundary() {
 
   // only for manual data source
   const [pointLabel, setPointLabel] = useState("Black");
+
+  // reset model when dataset changes
+  useEffect(() => {
+    setModel(null);
+  }, [dataset, dataSource]);
 
 	return (
 		<div>
