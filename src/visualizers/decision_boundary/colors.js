@@ -9,3 +9,19 @@ export const OKABE_ITO_COLORS = [
   { name: "Pink", value: "#CC79A7" }
 ];
 
+export function makeClassColorScale(pallette) {
+  const scale = [];
+  const n = pallette.length;
+
+  for (let i = 0; i < n; ++i) {
+    const t0 = i / n;
+    const t1 = (i + 1) / n;
+    const color = pallette[i].value;
+
+    scale.push([t0, color]);
+    scale.push([t1, color]);
+  }
+
+  return scale;
+}
+

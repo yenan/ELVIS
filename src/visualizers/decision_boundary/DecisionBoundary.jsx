@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import ClickablePlot from "./ClickablePlot.jsx";
 import Sidebar from "./Sidebar.jsx";
 import { OKABE_ITO_COLORS } from "./colors.js";
@@ -105,9 +105,56 @@ function loadCsv(file, setDataset) {
   reader.readAsText(file);
 }
 
+function computeDecisionRegionPoints(model, plotDomain, resolution = 100) {
+  const x0 = plotDomain.x[0];
+  const y0 = plotDomain.y[0];
+
+  const xRange = plotDomain.x[1] - plotDomain.x[0];
+  const yRange = plotDomain.y[1] - plotDomain.y[0];
+
+  let xs = [];
+  let ys = [];
+  for (let i = 0; i < resolution; ++i) {
+    const x = x0 + (i / (resolution - 1)) * xRange;
+    const y = y0 + (i / (resolution - 1)) * yRange;
+    xs.push(x);
+    ys.push(y);
+  }
+
+  if (!model) {
+    return { x: xs, y: ys, labels: null };
+  }
+
+  let labels = [];
+  for (let i = 0; i < resolution; ++i) {
+    const y = y0 + (i / (resolution - 1)) * yRange;
+    let row = [];
+
+    for (let j = 0; j < resolution; ++j) {
+      const x = x0 + (j / (resolution - 1)) * xRange;
+      const pred = model.predict([[x, y]]);
+      row.push(pred[0]);
+    }
+    labels.push(row);
+  }
+
+  return { x: xs, y: ys, labels: labels };
+}
+
 function DecisionBoundary() {
 	const [dataSource, setDataSource] = useState("manual");
   const [dataset, setDataset] = useState({});
+
+  const [plotDomain, setPlotDomain] = useState({
+    x: [-1, 1],
+    y: [-1, 1],
+  });
+
+  const [model, setModel] = useState(null);
+
+  const decisionRegionPoints = useMemo(() => {
+    return computeDecisionRegionPoints(model, plotDomain);
+  }, [model, plotDomain]);
 
   // only for manual data source
   const [pointLabel, setPointLabel] = useState("Black");
@@ -118,19 +165,30 @@ function DecisionBoundary() {
 			<div className="visualizer-container">
 		    <ClickablePlot 
           dataset={dataset}
+
           addDataPoint={(point, label) => addDataPoint(dataset, setDataset, point, label)}
           pointLabel={pointLabel}
           pallette={OKABE_ITO_COLORS}
+
+          domain={plotDomain}
+          setDomain={setPlotDomain}
+          decisionRegionPoints={decisionRegionPoints}
 				/>
+
         <Sidebar 
           dataSource={dataSource}
           setDataSource={setDataSource}
+
           pointLabel={pointLabel}
           setPointLabel={setPointLabel}
           pallette={OKABE_ITO_COLORS}
+
           downloadCsv={() => downloadCsv(dataset)}
           clearData={() => clearData(setDataset)}
           loadCsv={(file) => loadCsv(file, setDataset)}
+
+          dataset={dataset}
+          setModel={setModel}
         />
 			</div>
 		</div>

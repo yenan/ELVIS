@@ -12,6 +12,9 @@
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",
     "mathjs": "^15.1.0",
+    "ml-knn": "^3.0.0",
+    "ml-logistic-regression": "^2.0.0",
+    "ml-matrix": "^6.12.1",
     "plotly.js": "^3.3.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

@@ -1,4 +1,5 @@
 import DataTab from "./DataTab.jsx";
+import ModelTab from "./ModelTab.jsx";
 import Tabs from "../../components/Tabs/Tabs.jsx";
 
 function Sidebar(props) {
@@ -20,7 +21,14 @@ function Sidebar(props) {
     },
     {
       label: "Model",
-      content: <div>Model Tab Content</div>,
+      content: (
+        <ModelTab
+          dataset={props.dataset}
+          setModel={props.setModel}
+          dataSource={props.dataSource}
+          pallette={props.pallette}
+        />
+      ),
     },
   ];
 

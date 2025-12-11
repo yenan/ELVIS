@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Plot from "react-plotly.js";
+import { makeClassColorScale } from "./colors.js";
 
 function ClickablePlot(props) {
   const plotRef = useRef(null);
@@ -8,16 +9,17 @@ function ClickablePlot(props) {
     height: 600,
     dragmode: "pan",
     xaxis: { 
-      range: [-1, 1],
-      automargin: true,
+      range: props.domain.x,
+      automargin: true
     },
     yaxis: { 
-      range: [-1, 1],
-      automargin: true,
+      range: props.domain.y,
+      automargin: true
     },
-    margin: { t: 0, b: 0, l: 0, r: 0 },
+    margin: { t: 0, b: 0, l: 0, r: 0 }
   });
 
+  // click to add points handling
   useEffect(() => {
     const plotEl = plotRef.current?.el;
     if (!plotEl) {
@@ -65,6 +67,30 @@ function ClickablePlot(props) {
     };
   }, [props.addDataPoint, props.pointLabel]);
 
+  // x and y domain change handling
+  useEffect(() => {
+    const plotEl = plotRef.current?.el;
+    if (!plotEl) {
+      return;
+    }
+
+    function handleRelayout(evt) {
+      if (evt["xaxis.range[0]"] !== undefined && evt["yaxis.range[0]"] !== undefined) {
+        const newDomain = {
+          x: [evt["xaxis.range[0]"], evt["xaxis.range[1]"]],
+          y: [evt["yaxis.range[0]"], evt["yaxis.range[1]"]],
+        };
+        props.setDomain(newDomain);
+      }
+    }
+
+    plotEl.on("plotly_relayout", handleRelayout);
+
+    return () => {
+      plotEl.removeListener("plotly_relayout", handleRelayout);
+    };
+  }, [props.setDomain]);
+
   const dataTraces = props.dataset 
     ? Object.entries(props.dataset).map(([label, points]) => ({
         x: points.x,
@@ -76,11 +102,31 @@ function ClickablePlot(props) {
       }))
     : [];
 
+  const labelToIndex = Object.fromEntries(
+    props.pallette.map((c, idx) => [c.name, idx])
+  );
+  const decisionRegionTrace = props.decisionRegionPoints && props.decisionRegionPoints.labels
+    ? {
+        x: props.decisionRegionPoints.x,
+        y: props.decisionRegionPoints.y,
+        z: props.decisionRegionPoints.labels.map(row =>
+          row.map(label => labelToIndex[label] || 0)
+        ),
+        type: "heatmap",
+        showscale: false,
+        colorscale: makeClassColorScale(props.pallette),
+        zmin: 0,
+        zmax: props.pallette.length - 1,
+        hoverinfo: "skip",
+        opacity: 0.1,
+      }
+    : [];
+
   return (
 		<div className="plot-container">
 			<Plot
 				ref={plotRef}
-				data={dataTraces}
+				data={[...dataTraces, decisionRegionTrace]}
 				layout={layoutRef.current}
 				config={{
 					scrollZoom: true,
