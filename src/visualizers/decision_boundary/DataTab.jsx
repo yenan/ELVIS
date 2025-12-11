@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import UploadDataOptions from "./UploadDataOptions.jsx";
 import "./styles.css";
 
 function DataTab(props) {
@@ -29,9 +30,7 @@ function DataTab(props) {
               ))}
             </select>
           </div>
-          <div className="button">
-            <button onClick={() => props.downloadCsv()}>Download CSV</button>
-          </div>
+          <button onClick={() => props.downloadCsv()}>Download CSV</button>
           <input
             ref={fileInputRef}
             type="file"
@@ -39,14 +38,11 @@ function DataTab(props) {
             style={{ display: "none" }}
             onChange={(e) => props.loadCsv(e.target.files[0])}
           />
-          <div className="button">
-            <button onClick={() => fileInputRef.current.click()}>Load CSV</button>
-          </div>
-          <div className="button">
-            <button onClick={() => props.clearData()}>Clear</button>
-          </div>
+          <button onClick={() => fileInputRef.current.click()}>Load CSV</button>
+          <button onClick={() => props.clearData()}>Clear</button>
         </>
       )}
+      { props.dataSource === "upload" && <UploadDataOptions /> }
     </div>
   );
 }
