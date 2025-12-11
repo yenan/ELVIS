@@ -8,17 +8,15 @@ function ClickablePlot(props) {
     height: 600,
     dragmode: "pan",
     xaxis: { 
-      range: [props.xMin, props.xMax],
+      range: [-1, 1],
       automargin: true,
     },
     yaxis: { 
-      range: [props.yMin, props.yMax],
+      range: [-1, 1],
       automargin: true,
     },
     margin: { t: 0, b: 0, l: 0, r: 0 },
   });
-
-  const [points, setPoints] = useState([]);
 
   useEffect(() => {
     const plotEl = plotRef.current?.el;
@@ -56,12 +54,8 @@ function ClickablePlot(props) {
         return;
       }
 
-      setPoints((prev) => {
-        return [
-          ...prev,
-          { x: xVal, y: yVal }
-        ];
-      });
+      props.addDataPoint({ x: xVal, y: yVal }, props.pointLabel);
+
     }
 
     plotEl.addEventListener("click", handleClick);
@@ -69,20 +63,24 @@ function ClickablePlot(props) {
     return () => {
       plotEl.removeEventListener("click", handleClick);
     };
-  }, []);
+  }, [props.addDataPoint, props.pointLabel]);
 
-  const trace = {
-    x: points.map((p) => p.x),
-    y: points.map((p) => p.y),
-    mode: "markers",
-    marker: { size: 10 }
-  };
+  const dataTraces = props.dataset 
+    ? Object.entries(props.dataset).map(([label, points]) => ({
+        x: points.x,
+        y: points.y,
+        mode: "markers",
+        marker: { size: 10, color: props.pallette.find(c => c.name === label)?.value || "black" },
+        type: "scatter",
+        name: label,
+      }))
+    : [];
 
   return (
 		<div className="plot-container">
 			<Plot
 				ref={plotRef}
-				data={[trace]}
+				data={dataTraces}
 				layout={layoutRef.current}
 				config={{
 					scrollZoom: true,
