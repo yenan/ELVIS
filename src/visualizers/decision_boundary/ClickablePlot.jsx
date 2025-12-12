@@ -10,13 +10,11 @@ function ClickablePlot(props) {
     dragmode: "pan",
     xaxis: { 
       range: props.domain.x,
-      automargin: true
     },
     yaxis: { 
       range: props.domain.y,
-      automargin: true
     },
-    margin: { t: 0, b: 0, l: 0, r: 0 }
+    margin: { t: 0, b: 20, l: 20, r: 0 }
   });
 
   // click to add points handling
@@ -27,6 +25,10 @@ function ClickablePlot(props) {
     }
 
     function handleClick(evt) {
+      if (!props.canAddPoints) {
+        return;
+      }
+
       const gd = plotEl;
 
       // bounding box of the entire plot div

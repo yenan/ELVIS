@@ -96,24 +96,43 @@ function textToDataset(csvText) {
   return dataset;
 }
 
-function loadCsv(file, setDataset) {
+function loadCsv(file, setDataset, dataSource) {
   const reader = new FileReader();
   reader.onload = () => {
     const csvText = reader.result;
-    setDataset(textToDataset(csvText));
+    let newDataset = {};
+    if (dataSource === "manual") {
+      newDataset = textToDataset(csvText);
+    } else {
+      newDataset = textToDataset(csvText);
+    }
+    setDataset(newDataset);
   };
   reader.readAsText(file);
 }
 
-function computeDecisionRegionPoints(model, plotDomain, resolution = 100) {
-  const x0 = plotDomain.x[0];
-  const y0 = plotDomain.y[0];
-
+function computeDecisionRegionPoints(model, plotDomain, resolution = 200, outResolution = 20) {
   const xRange = plotDomain.x[1] - plotDomain.x[0];
   const yRange = plotDomain.y[1] - plotDomain.y[0];
 
+  const halfXRange = Math.floor(xRange / 2);
+  const halfYRange = Math.floor(yRange / 2);
+
+  const x0 = plotDomain.x[0];
+  const y0 = plotDomain.y[0];
+
   let xs = [];
   let ys = [];
+  
+  // out region
+  for (let i = 0; i < outResolution; ++i) {
+    const x = x0 - halfXRange + (i / (outResolution - 1)) * halfXRange;
+    const y = y0 - halfYRange + (i / (outResolution - 1)) * halfYRange;
+    xs.push(x);
+    ys.push(y);
+  }
+
+  // in region
   for (let i = 0; i < resolution; ++i) {
     const x = x0 + (i / (resolution - 1)) * xRange;
     const y = y0 + (i / (resolution - 1)) * yRange;
@@ -121,17 +140,25 @@ function computeDecisionRegionPoints(model, plotDomain, resolution = 100) {
     ys.push(y);
   }
 
+  // out region
+  for (let i = 0; i < outResolution; ++i) {
+    const x = x0 + xRange + (i / (outResolution - 1)) * halfXRange;
+    const y = y0 + yRange + (i / (outResolution - 1)) * halfYRange;
+    xs.push(x);
+    ys.push(y);
+  }
+  
   if (!model) {
     return { x: xs, y: ys, labels: null };
   }
 
   let labels = [];
-  for (let i = 0; i < resolution; ++i) {
-    const y = y0 + (i / (resolution - 1)) * yRange;
+  for (let i = 0; i < ys.length; ++i) {
+    const y = ys[i];
     let row = [];
 
-    for (let j = 0; j < resolution; ++j) {
-      const x = x0 + (j / (resolution - 1)) * xRange;
+    for (let j = 0; j < xs.length; ++j) {
+      const x = xs[j];
       const pred = model.predict([[x, y]]);
       row.push(pred[0]);
     }
@@ -174,6 +201,7 @@ function DecisionBoundary() {
           addDataPoint={(point, label) => addDataPoint(dataset, setDataset, point, label)}
           pointLabel={pointLabel}
           pallette={OKABE_ITO_COLORS}
+          canAddPoints={dataSource === "manual"}
 
           domain={plotDomain}
           setDomain={setPlotDomain}
