@@ -14,6 +14,7 @@ function ArchitectureEditor(props) {
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           rows={20}
+          style={{ height: "auto" }}
         />
       </div>
       <Button
