@@ -1,33 +1,32 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import ClickablePlot from "./ClickablePlot.jsx";
 import Sidebar from "./Sidebar.jsx";
 import { OKABE_ITO_COLORS } from "./colors.js";
+import { Dataset } from "./dataset.js";
 import "./styles.css";
 
 function addDataPoint(dataset, setDataset, point, label) {
-  setDataset(prev => {
-    const next = structuredClone(prev);
-
-    if (!next[label]) {
-      next[label] = { x: [], y: [] };
-    }
-    
-    next[label].x.push(point.x);
-    next[label].y.push(point.y);
-
-    return next;
-  });
+  const newDataset = dataset.addDataPoint(point, label);
+  setDataset(newDataset);
 }
 
 function downloadCsv(dataset) {
-  const rows = [["x", "y", "label"]];
+  const data = dataset.getDataForTrain();
+  if (!data || data.features.length === 0) {
+    alert("No data to download.");
+    return;
+  }
 
-  for (const label in dataset) {
-    const xs = dataset[label].x;
-    const ys = dataset[label].y;
-    for (let i = 0; i < xs.length; ++i) {
-      rows.push([xs[i], ys[i], label]);
-    }
+  const numFeatures = data.features[0].length;
+  let header = Array.from({ length: numFeatures }, (_, i) => `x${i + 1}`);
+  header.push("y");
+
+  let rows = [header];
+
+  for (let i = 0; i < data.features.length; ++i) {
+    const featureRow = data.features[i];
+    const label = data.labels[i];
+    rows.push([...featureRow, label]);
   }
 
   const csvContent = rows.map(row => row.join(",")).join("\n");
@@ -44,16 +43,17 @@ function downloadCsv(dataset) {
   URL.revokeObjectURL(url);
 }
 
-function clearData(setDataset) {
-  setDataset({});
+function clearData(dataset, setDataset) {
+  const newDataset = dataset.clearData();
+  setDataset(newDataset);
 }
 
 function textToDataset(csvText) {
-  // assume csv format: x,y,label
+  // assume csv format: x1,x2,...,xn,label
   // will ignore headers and invalid lines
   
   const lines = csvText.trim().split("\n");
-  const dataset = {};
+  let dataset = new Dataset();
 
   for (const line of lines) {
     try {
@@ -63,29 +63,19 @@ function textToDataset(csvText) {
       }
 
       const cells = line.split(",");
-      if (cells.length !== 3) {
+      if (cells.length < 3) {
         continue;
       }
 
-      let [xStr, yStr, label] = cells;
+      const x = cells.slice(0, -1).map(v => parseFloat(v.trim()));
+      const label = cells[cells.length - 1].trim();
 
-      xStr = xStr.trim();
-      yStr = yStr.trim();
-      label = label.trim();
-
-      const x = parseFloat(xStr);
-      const y = parseFloat(yStr);
-
-      if (isNaN(x) || isNaN(y) || !label) {
+      if (x.some(v => isNaN(v)) || label === "") {
         continue;
       }
 
-      if (!dataset[label]) {
-        dataset[label] = { x: [], y: [] };
-      }
-
-      dataset[label].x.push(x);
-      dataset[label].y.push(y);
+      // todo - this is probably slow for large datasets
+      dataset = dataset.addDataPoint(x, label);
 
     } catch (e) {
       // skip invalid lines
@@ -100,12 +90,7 @@ function loadCsv(file, setDataset, dataSource) {
   const reader = new FileReader();
   reader.onload = () => {
     const csvText = reader.result;
-    let newDataset = {};
-    if (dataSource === "manual") {
-      newDataset = textToDataset(csvText);
-    } else {
-      newDataset = textToDataset(csvText);
-    }
+    const newDataset = textToDataset(csvText);
     setDataset(newDataset);
   };
   reader.readAsText(file);
@@ -170,7 +155,7 @@ function computeDecisionRegionPoints(model, plotDomain, resolution = 200, outRes
 
 function DecisionBoundary() {
 	const [dataSource, setDataSource] = useState("manual");
-  const [dataset, setDataset] = useState({});
+  const [dataset, setDataset] = useState(new Dataset());
 
   const [plotDomain, setPlotDomain] = useState({
     x: [-1, 1],
@@ -190,7 +175,7 @@ function DecisionBoundary() {
   useEffect(() => {
     setModel(null);
   }, [dataset, dataSource]);
-
+  
 	return (
 		<div>
 			<h1>Decision Boundary Visualizer</h1>
@@ -220,7 +205,7 @@ function DecisionBoundary() {
           pallette={OKABE_ITO_COLORS}
 
           downloadCsv={() => downloadCsv(dataset)}
-          clearData={() => clearData(setDataset)}
+          clearData={() => clearData(dataset, setDataset)}
           loadCsv={(file) => loadCsv(file, setDataset)}
 
           dataset={dataset}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import Plot from "react-plotly.js";
 import { makeClassColorScale } from "./colors.js";
 
@@ -58,7 +58,7 @@ function ClickablePlot(props) {
         return;
       }
 
-      props.addDataPoint({ x: xVal, y: yVal }, props.pointLabel);
+      props.addDataPoint([xVal, yVal], props.pointLabel);
 
     }
 
@@ -93,8 +93,9 @@ function ClickablePlot(props) {
     };
   }, [props.setDomain]);
 
-  const dataTraces = props.dataset 
-    ? Object.entries(props.dataset).map(([label, points]) => ({
+  const dataForVis = props.dataset?.getDataForVis();
+  const dataTraces = dataForVis
+    ? Object.entries(dataForVis).map(([label, points]) => ({
         x: points.x,
         y: points.y,
         mode: "markers",

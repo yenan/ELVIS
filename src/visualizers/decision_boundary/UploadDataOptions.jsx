@@ -10,6 +10,7 @@ function UploadDataOptions(props) {
         type="file"
         accept=".csv"
         style={{ display: "none" }}
+        onChange={props.onFileUpload}
       />
       <button 
         onClick={() => fileInputRef.current.click()}

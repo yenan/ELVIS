@@ -2,24 +2,16 @@ import { getModel, DEFAULT_HYPERPARAMETERS } from './model.js';
 import { useState } from 'react';
 
 
-function getDataForTraining(dataset, dataSource, pallette = null) {
-  if (!dataset || Object.keys(dataset).length === 0) {
+function getDataForTraining(dataset, dataSource) {
+  const data = dataset?.getDataForTrain();
+  const numClasses = dataset?.getNumClasses() || 0;
+
+  if (!data || data.features.length === 0 || numClasses === 0) {
     return null;
   }
 
-  let X = [];
-  let y = [];
-  let numClasses = 0;
-  for (const label in dataset) {
-    numClasses += 1;
-
-    const xVals = dataset[label].x;
-    const yVals = dataset[label].y;
-    for (let i = 0; i < xVals.length; i++) {
-      X.push([xVals[i], yVals[i]]);
-      y.push(label);
-    }
-  }
+  const X = data.features;
+  const y = data.labels;
 
   return { X, y, numClasses };
 }
@@ -27,7 +19,7 @@ function getDataForTraining(dataset, dataSource, pallette = null) {
 function handleTrainModel(dataset, modelType, hyperparameters, setModel) {
   const data = getDataForTraining(dataset);
   if (!data) {
-    console.error("Invalid dataset provided for training.");
+    alert("Dataset is empty or invalid.");
     return;
   }
   
