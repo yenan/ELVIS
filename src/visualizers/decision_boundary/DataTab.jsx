@@ -42,7 +42,13 @@ function DataTab(props) {
           <button onClick={() => props.clearData()}>Clear</button>
         </>
       )}
-      { props.dataSource === "upload" && <UploadDataOptions /> }
+      { props.dataSource === "upload" && (
+        <>
+          <UploadDataOptions 
+            onFileUpload={props.loadCsv}
+          /> 
+        </>
+      )}
     </div>
   );
 }

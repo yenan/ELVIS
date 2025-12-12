@@ -77,6 +77,24 @@ class Dataset {
         this.preprocess_options,
       );
     }
+
+    updateEmbederOptions(options) {
+      return new Dataset(
+        this._data_for_train,
+        this._data_for_vis,
+        options,
+        this.preprocess_options,
+      );
+    }
+
+    updatePreprocessOptions(options) {
+      return new Dataset(
+        this._data_for_train,
+        this._data_for_vis,
+        this.embeder_options,
+        options,
+      );
+    }
 }
 
 export { Dataset };
