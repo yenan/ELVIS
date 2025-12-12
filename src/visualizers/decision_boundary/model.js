@@ -1,11 +1,13 @@
 import { Matrix } from 'ml-matrix';
 import LogisticRegression from 'ml-logistic-regression';
 import KNN from 'ml-knn';
+import { DecisionTreeClassifier } from 'ml-cart';
 
 
 const DEFAULT_HYPERPARAMETERS = {
   KNN: { k: "3" },
   LogisticRegression: { numSteps: "50000", learningRate: "0.0005" },
+  DecisionTree: { gainFunction: "gini", maxDepth: "10", minNumSamples: "3" }
 };
 
 
@@ -14,6 +16,8 @@ function getModel(modelType, hyperparameters) {
     return new KnnModel(hyperparameters);
   } else if (modelType === "LogisticRegression") {
     return new LogisticRegressionModel(hyperparameters);
+  } else if (modelType === "DecisionTree") {
+    return new DecisionTreeModel(hyperparameters);
   } else {
     throw new Error(`Unsupported model type: ${modelType}`);
   }
@@ -109,6 +113,31 @@ class LogisticRegressionModel extends BaseModel {
     return predictions;
   }
 
+}
+
+
+class DecisionTreeModel extends BaseModel {
+  constructor(hyperparameters) {
+    super(hyperparameters);
+    this._model = new DecisionTreeClassifier(hyperparameters);
+  }
+
+  train(X, y) {
+    this._buildLabelMappings(y);
+    let yInt = y.map(label => this.labelToInt[label]);
+    this._model.train(X, yInt);
+  }
+
+  predict(X) {
+    if (!this._model) {
+      console.error("Model has not been trained yet.");
+      return null;
+    }
+
+    const predictionsInt = this._model.predict(X);
+    const predictions = predictionsInt.map(intLabel => this.intToLabel[intLabel]);
+    return predictions;
+  }
 }
 
 

@@ -12,6 +12,7 @@
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",
     "mathjs": "^15.1.0",
+    "ml-cart": "^2.1.1",
     "ml-knn": "^3.0.0",
     "ml-logistic-regression": "^2.0.0",
     "ml-matrix": "^6.12.1",

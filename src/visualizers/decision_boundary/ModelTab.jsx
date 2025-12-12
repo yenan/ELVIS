@@ -47,6 +47,7 @@ function ModelTab(props) {
         >
           <option value="KNN">K-Nearest Neighbors</option>
           <option value="LogisticRegression">Logistic Regression</option>
+          <option value="DecisionTree">Decision Tree</option>
         </select>
       </div>
 

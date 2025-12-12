@@ -197,7 +197,8 @@ function DecisionBoundary() {
           dataSource={dataSource}
           setDataSource={(source) => {
             setDataSource(source);
-            setDataset({});
+            const newDataset = dataset.clearData();
+            setDataset(newDataset);
           }}
 
           pointLabel={pointLabel}
